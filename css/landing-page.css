@@ -1,0 +1,820 @@
+/*
+ * Start Bootstrap - Landing Page (http://startbootstrap.com/)
+ * Copyright 2013-2016 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+    width: 100%
+}
+
+html {
+  height: 100%;
+}
+
+/* STYLE GLOBAL
+======================= */ 
+
+h1 {
+    font-weight: 100;
+    font-size: 45px;
+    line-height: 55px;
+    padding-bottom: 15px;
+    color: #222222;
+    text-align: center;
+}
+
+@media(min-width:480px) {   
+    h1 {
+        font-size: 70px;
+        line-height: 80px;
+        padding-bottom: 40px;
+        padding-top: 50px;
+    }
+}
+
+h2 { 
+    font-weight: 300;
+    font-size: 28px;
+    line-height: 40px;
+}
+
+@media(min-width:480px) {   
+    h2 {
+        font-size: 48px;
+        color: #222222;
+        line-height: 62px;
+    }
+}
+
+h3 {
+    font-weight: 300;
+    font-size: 24px;
+    color: #000000;
+    line-height: 38px;
+    padding-top: 30px;
+}
+
+h4 {
+    font-weight: 300;
+    font-size: 30px;
+    color: #222222;
+    padding-top: 30px;
+}
+
+h5 {
+    font-weight: 300;
+    font-size: 24px;
+    color: #222222;
+    padding-top: 30px;
+}
+
+p {
+    font-weight: 300;
+    font-size: 14px;
+    color: #4A4A4A;
+    line-height: 20px;
+    padding-top: 15px;
+}
+
+@media(min-width:480px) {   
+    p {
+        font-size: 20px;
+        color: #4A4A4A;
+        line-height: 34px;
+    }
+}
+
+.lead {
+    font-weight: 300;
+    font-size: 15px;
+    color: #000000;
+    line-height: 22px;
+    text-align: center;
+    max-width: 650px;
+    margin: auto;
+    padding-bottom: 20px;
+}
+
+@media(min-width:480px) {   
+    .lead {
+        font-size: 24px;
+        line-height: 38px;
+        padding-bottom: inherit;
+    }
+}
+
+a {
+    color: #4083FF;
+}
+
+a:hover {
+    color: #4083FF;
+    text-decoration: underline;
+}
+
+label {
+    font-weight: 100;
+}
+
+.num-section {
+    font-weight: 300;
+    font-size: 18px;
+    color: #4083FF;
+}
+
+@media(min-width:480px) {   
+    .num-section {
+        font-size: 24px;
+    }
+}
+
+.block {
+    padding-top: 30px;
+    padding-bottom: 0px;
+}
+
+
+@media(min-width:480px) {   
+    .block {
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+}
+
+.container {
+    padding-right: 10%;
+    padding-left: 10%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+@media(min-width:480px) {   
+    .container {
+        padding-right: 15%;
+        padding-left: 15%;
+        margin-right: auto;
+        margin-left: auto;
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+}
+
+.container-fluid {
+    padding-right: 7%;
+    padding-left: 7%;
+    margin-right: auto;
+    margin-left: auto;
+    padding-bottom: 10%;
+    padding-top: 20%;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+/*
+.flotte {           
+    float:left;
+}
+*/
+
+
+
+/* NAVBAR 
+====================== */ 
+
+.navbar-header {
+    background: #000000;
+}
+
+.bs-example-navbar-collapse-1 {
+    max-width: 1000px;
+}
+
+.topnav {
+    font-size: 12px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.navbar-default {
+    background-color: #000000;
+    border-color: #e7e7e7;
+}
+
+.navbar-default .navbar-nav>li>a {
+    font-family: Roboto;
+    font-weight: 300;
+    color: #FFFFFF;
+    font-size: 15px;
+    letter-spacing: 0px;
+    line-height: 22px;
+    padding-top: 4px;
+}
+
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: #6F80F4;
+}
+
+.navbar-default .navbar-nav>li>a:active {
+    color: #3A48AC;
+}
+
+.legende {
+    font-weight: 400;
+    font-size: 15px;
+    color: #3A48AC;
+    letter-spacing: 0;
+    line-height: 22px;
+    float: left;
+}
+
+.navbar-minilogo {
+    height: 45px; 
+    max-width: 800px; 
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-right: 10px;
+    float: left;
+}
+
+.intro-header {
+    padding-top: 50px; /* If you're making other pages, make sure there is 50px of padding to make sure the navbar doesn't overlap content! */
+    padding-bottom: 50px;
+    text-align: center;
+    color: #f8f8f8;
+    background: url(../img/intro-bg.jpg) no-repeat center center; 
+    background-size: cover;
+}
+
+.intro-header--biglogo {
+    max-width: 90%; 
+    padding-bottom: 10%; 
+    padding-top: 10%;
+}
+
+.row--intro-header--chevron {
+    padding-top: 20px;
+    padding-bottom: 0px;
+}
+
+.header-fa-chevron {
+    color: #9F2276;
+}
+
+
+
+/* ======================================================================
+    LOGIN 
+====================================================================== */ 
+
+
+.block--login {
+    width:100%;
+    height:100%;
+    padding: 0 0 0 0;
+}
+
+
+.container--login {
+    float:left;
+    width:100%;
+    height:100%;
+    padding: 0 0 0 0;
+}
+
+.row--login {
+    height: 100%;
+    padding-bottom: 30px;
+}
+
+@media(min-width:480px) {
+    .row--login {
+        padding-bottom: 0px;
+    }  
+}
+
+
+.left {
+    float: left;
+    width: 100%;
+    padding-top: 30px;
+} 
+
+@media(min-width:480px) {
+    .left {
+        float: none;
+        width: 50%;
+        padding-top: 10%;
+    }    
+}
+
+.left h1 {
+    font-weight: 400;
+    font-size: 30px;
+    color: #000000;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+@media(min-width:480px) {
+    .left h1{
+        padding-top: 0%;
+    }    
+}
+
+
+.left h2 {
+    opacity: 0.4;
+    font-weight: 400;
+    font-size: 15px;
+    color: #1D1D26;
+    letter-spacing: 1px;
+    line-height: 10px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    text-align: center;
+
+}
+
+@media(min-width:480px) {
+    .left h2 {
+        padding-left: 20%;
+        text-align: inherit;
+        padding-top: 10px;
+    }    
+}
+
+
+.left .form-control {
+    max-width: 80%;
+    margin-left: 0%;
+    margin: auto;
+}
+
+@media(min-width:480px) {
+    .left .form-control {
+        max-width: 60%;
+        margin-left: 20%;
+    }
+}
+
+
+.left .blue-circle-button {
+    display: block;
+    margin : auto;
+    margin-top: 20px;
+}   
+
+.right {
+    float:right;
+    background-color: #000000;
+}
+
+@media(min-width:480px) {
+    .right {
+        padding-top: 0%;
+        height:100%; 
+    }
+}
+
+
+.right img {
+    display: block;
+    max-width: 40%;
+    height: auto;
+    margin: auto;
+    padding-top: 8%;
+}
+
+@media(min-width:480px) {
+    .right img {
+        padding-top: 10%;
+    }
+}
+
+.right h1 {
+    font-weight: 100;
+    font-size: 60px;
+    color: #FFFFFF;
+    letter-spacing: -0.94px;
+    text-align: center;
+    padding-bottom: 0px;
+}
+
+@media(min-width:480px) {
+    .right h1 {
+        font-size: 90px;
+        padding-bottom: 30px;
+    }
+}
+
+.right h2 {
+    font-weight: 100;
+    font-size: 25px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 10px;
+}
+
+@media(min-width:480px) {
+    .right h2 {
+        font-size: 46px;
+        line-height: inherit;
+    }
+}
+
+.right h3 {
+    font-weight: 100;
+    font-size: 20px;
+    color: #FFFFFF;
+    text-align: center;
+    padding-top: 0px;
+    line-height: 20px;
+    padding-bottom: 30px;
+}
+
+@media(min-width:480px) {
+    .right h3 {
+        font-size: 24px;
+        line-height: inherit;
+        padding-bottom: inherit;
+    }
+}
+
+
+
+/* ======================================================================
+    HOME 
+====================================================================== */ 
+
+
+.block--home ul, li {
+    font-weight: 300;
+    font-size: 15px;
+    color: #4A4A4A;
+    line-height: 20px;
+    padding-top: 10px;
+    margin-left: 10px;
+    padding-left: 3px;
+}
+
+@media(min-width:480px) {
+    .block--home ul, li {
+        font-size: 20px;
+    }
+}
+
+/*
+.container--team img {
+    max-width: 40%;
+    padding-bottom: 0px;
+    padding-top: 40px;
+} */
+
+
+.img-team {
+    /* float: left; */
+    max-width: 100px;
+    /* margin-right: 20px; */
+    margin: auto;
+}
+
+@media(min-width:480px) {
+    .img-team {
+        float:left;
+        max-width: 100px;
+        margin-right: 20px;
+    }
+}
+
+
+.team-img {
+}
+
+@media(min-width:480px) {
+    .team-img {
+        float: left;
+        width: 130px;
+    }
+}
+
+.team-description {
+    float:inherit;
+    text-align: center;
+}
+
+@media(min-width:480px) {
+    .team-description {
+        float:left;
+        text-align: inherit;
+    }
+}
+
+
+.row--team {
+    padding-top: 30px;
+}
+
+.container--team h4 {
+    font-size: 20px;
+    padding-top: 0px;
+}
+
+@media(min-width:480px) {
+    .container--team h4 {
+        font-size: inherit;
+    }
+}
+
+.container--team p {
+    padding-top: 0px;
+    line-height: 15px;
+}
+
+.container--team a {
+    padding-top: 0px;
+    line-height: 15px;
+}
+
+.container--home-declare-btn {
+    padding-top: 0px;
+    padding-bottom: 70px;
+}
+
+@media(min-width:480px) {
+    .container--home-declare-btn {
+        padding-top: 70px;
+    }
+}
+
+.container--home-declare-btn .btn {
+    margin-top: 30px;
+}
+
+/* ======================================================================
+    THREATS / DECLARE 
+====================================================================== */ 
+
+/* HERO INTRODUCTION */
+
+
+.block--declare-header {
+    background: #F3F3F3;
+}
+
+p.form-legends-links {
+    font-size: 14px;
+    padding-top: 0px;
+    line-height: 20px;
+    padding-bottom: 10px;
+}
+
+.container--threat-introduction h1 {
+    padding-top: 30px;
+    padding-bottom: 0px;
+}
+
+@media(min-width:480px) {
+    .container--threat-introduction h1 {
+        padding-top: 0px;
+        padding-bottom: inherit;
+    }
+}
+
+
+/* ACCESS IMPACT AND PROBA */
+
+
+.container--riskmatrix .col-sm-12, .col-md-4 {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+p.labelperso {
+    font-size: 16px;
+    color: #4A4A4A;
+}
+
+
+
+/* RECOMMEND MITIGATION */ 
+
+
+.container--button {
+    padding-top: 0px;
+}
+
+@media(min-width:480px) {
+    .container--button {
+        padding-top: 40px;
+    }
+}
+
+
+.blue-circle-button {
+    background-color:#4083ff;
+    border-radius:28px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-weight: 300;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-top: 20px
+    font-size:15px;
+    width: 200px;
+}
+
+@media(min-width:480px) {
+    .blue-circle-button {
+        font-size:17px;
+        width: 250px;
+    }
+}
+
+.white-circle-button {
+    background-color:#FFFFFF;
+    border-radius:28px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#4e6096;
+    font-weight: 300;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-top: 20px;
+    font-size:15px;
+    width: 200px;
+}
+
+@media(min-width:480px) {
+    .white-circle-button {
+        font-size:17px;
+        width: 250px;
+        margin-top: 0px;
+    }
+}
+
+/* ======================================================================
+    CONFIRMATION 
+====================================================================== */ 
+
+.container--thankyou {
+    padding-top: 30px;
+}
+
+@media(min-width:480px) {
+    .container--thankyou {
+        padding-bottom: 20px;
+    }
+}
+
+.container-confirmation-btn {
+    padding-top: 0px;
+    max-width: 80%;
+    margin: auto;
+}
+
+@media(min-width:480px) {
+    .container-confirmation-btn {
+        padding-top: 30px;
+    }
+}
+
+.container--thankyou .col-md-6 {
+    padding-left: Opx;
+}
+
+
+/* ======================================================================
+    DASHBOARD 
+====================================================================== */ 
+
+
+.container--dashboard-table {
+    padding-top: 0px;
+} 
+
+/* ======================================================================
+        FIN DU CSS PERSO 
+   ====================================================================== */ 
+
+
+.topnav {
+    font-size: 14px; 
+}
+
+
+.intro-message {
+    position: relative;
+    padding-top: 20%;
+    padding-bottom: 20%;
+}
+
+.intro-message > h1 {
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    font-size: 5em;
+}
+
+.intro-divider {
+    width: 400px;
+    border-top: 1px solid #f8f8f8;
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.intro-message > h3 {
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+}
+
+@media(max-width:767px) {
+    .intro-message {
+        padding-bottom: 15%;
+    }
+
+    .intro-message > h1 {
+        font-size: 3em;
+    }
+
+    ul.intro-social-buttons > li {
+        display: block;
+        margin-bottom: 20px;
+        padding: 0;
+    }
+
+    ul.intro-social-buttons > li:last-child {
+        margin-bottom: 0;
+    }
+
+    .intro-divider {
+        width: 100%;
+    }
+}
+
+.banner {
+    padding: 100px 0;
+    color: #f8f8f8;
+    background: url(../img/banner-bg.jpg) no-repeat center center;
+    background-size: cover;
+}
+
+.banner h2 {
+    margin: 0;
+    text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+    font-size: 3em;
+}
+
+.banner ul {
+    margin-bottom: 0;
+}
+
+.banner-social-buttons {
+    float: right;
+    margin-top: 0;
+}
+
+@media(max-width:1199px) {
+    ul.banner-social-buttons {
+        float: left;
+        margin-top: 15px;
+    }
+}
+
+@media(max-width:767px) {
+    .banner h2 {
+        margin: 0;
+        text-shadow: 2px 2px 3px rgba(0,0,0,0.6);
+        font-size: 3em;
+    }
+
+    ul.banner-social-buttons > li {
+        display: block;
+        margin-bottom: 20px;
+        padding: 0;
+    }
+
+    ul.banner-social-buttons > li:last-child {
+        margin-bottom: 0;
+    }
+}
+
+footer {
+    padding: 50px 0;
+    background-color: #f8f8f8;
+}
+
+p.copyright {
+    margin: 15px 0 0;
+}
