@@ -78,7 +78,12 @@ update msg model =
             ( { model | currentPage = DashboardPage }, Cmd.none )
 
         SubmitThreatForm ->
-            ( model, submitThreatForm )
+            case ( model.email, model.password ) of
+                ( Just email, Just password ) ->
+                    ( model, submitThreatForm email password model.threatForm )
+
+                _ ->
+                    ( { model | currentPage = LoginPage }, Cmd.none )
 
         CreateRecordResponse (Ok _) ->
             ( { model | currentPage = ConfirmationPage }, Cmd.none )
@@ -168,7 +173,7 @@ decodeRecord =
 encodeFormData : ThreatFormData -> Encode.Value
 encodeFormData formData =
     Encode.object
-        [ ( "objectives_at_stake", Encode.list <| Set.map Encode.string formData.threat_objectives_at_stake )
+        [ ( "objectives_at_stake", Encode.list <| List.map Encode.string <| Set.toList formData.threat_objectives_at_stake )
         , ( "project_package", Encode.string formData.threat_project_package )
         , ( "type", Encode.string formData.threat_type )
         , ( "description", Encode.string formData.threat_description )
@@ -939,7 +944,7 @@ threatForm =
                         [ a
                             [ href "#"
                             , class "btn blue-circle-button"
-                            , onClick GoToConfirmationPage
+                            , onClick SubmitThreatForm
                             ]
                             [ text "Submit" ]
                         ]
