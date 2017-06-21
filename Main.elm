@@ -1,90 +1,13 @@
 module Main exposing (..)
 
+import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode as Decode
 import Kinto
 import Set
-
-
-type alias Model =
-    { email : Maybe String
-    , password : Maybe String
-    , error : Maybe String
-    , currentPage : Pages
-    , threatForm : ThreatFormData
-    }
-
-
-type alias ThreatFormData =
-    { threat_objectives_at_stake : Set.Set String
-    , threat_project_package : String
-    , threat_type : String
-    , threat_description : String
-    , threat_title : String
-    , threat_cause : String
-    , threat_impact_schedule : String
-    , threat_impact_cost : String
-    , threat_impact_performance : String
-    , threat_probability : String
-    , threat_mitigation : String
-    }
-
-
-emptyThreatForm : ThreatFormData
-emptyThreatForm =
-    { threat_objectives_at_stake = Set.empty
-    , threat_project_package = ""
-    , threat_type = ""
-    , threat_description = ""
-    , threat_title = ""
-    , threat_cause = ""
-    , threat_impact_schedule = ""
-    , threat_impact_cost = ""
-    , threat_impact_performance = ""
-    , threat_probability = ""
-    , threat_mitigation = ""
-    }
-
-
-type Pages
-    = LoginPage
-    | HomePage
-    | ThreatForm
-    | ConfirmationPage
-    | DashboardPage
-
-
-type Msg
-    = NewEmail String
-    | NewPassword String
-    | Login
-    | FetchRecordsResponse (Result Kinto.Error (Kinto.Pager Record))
-    | GoToThreatForm
-    | ThreatFieldChange ThreatInput String
-    | GoToConfirmationPage
-    | GoToDashboardPage
-
-
-type ThreatInput
-    = ThreatObjectives
-    | ThreatProjectPackage
-    | ThreatType
-    | ThreatDescription
-    | ThreatTitle
-    | ThreatCause
-    | ThreatImpactSchedule
-    | ThreatImpactCost
-    | ThreatImpactPerformance
-    | ThreatProbability
-    | ThreatMitigation
-
-
-type alias Record =
-    { id : String
-    , last_modified : Int
-    }
+import LoginForm exposing (loginForm)
 
 
 init : ( Model, Cmd Msg )
@@ -1051,88 +974,6 @@ dashboardPage =
                 [ text "Dashboard" ]
             ]
         ]
-
-
-loginForm : Maybe String -> Html Msg
-loginForm loginError =
-    let
-        error =
-            case loginError of
-                Nothing ->
-                    div [] []
-
-                Just error ->
-                    div
-                        [ class "alert alert-danger" ]
-                        [ strong [] [ text "Login failed! " ]
-                        , text error
-                        ]
-    in
-        div
-            [ class "block block--login" ]
-            [ div
-                [ class "container container--login" ]
-                [ div
-                    [ class "row row--login" ]
-                    [ div
-                        [ class "col-md-6 right" ]
-                        [ img
-                            [ class "img-responsive", src "img/loyd.png", alt "" ]
-                            []
-                        , h1
-                            []
-                            [ text "Focus" ]
-                        , h2
-                            []
-                            [ text "Risk management" ]
-                        , h3
-                            []
-                            [ text "Get involved!" ]
-                        ]
-                    , error
-                    , div
-                        [ class "col-md-6 left" ]
-                        [ h1
-                            []
-                            [ text "LOGIN" ]
-                        , div
-                            [ class "form-group" ]
-                            [ h2
-                                []
-                                [ text "EMAIL ADDRESS" ]
-                            , input
-                                [ type_ "email"
-                                , class "form-control"
-                                , placeholder ""
-                                , id "email"
-                                , onInput NewEmail
-                                ]
-                                []
-                            , h2
-                                []
-                                [ text "PASSWORD" ]
-                            , input
-                                [ type_ "password"
-                                , class "form-control"
-                                , placeholder ""
-                                , id "password"
-                                , onInput NewPassword
-                                ]
-                                []
-                            ]
-                        , div
-                            [ class "row row--login" ]
-                            [ a
-                                [ href "#"
-                                , class "btn blue-circle-button"
-                                , onClick Login
-                                ]
-                                [ text "LOGIN" ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
 
 
 
