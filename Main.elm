@@ -5,6 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Json.Decode as Decode
+import Json.Encode as Encode
 import Kinto
 import Set
 import LoginForm exposing (loginForm)
@@ -64,13 +65,26 @@ update msg model =
             ( { model | currentPage = ThreatForm }, Cmd.none )
 
         ThreatFieldChange fieldType value ->
-            ( { model | threatForm = updateThreatForm fieldType model.threatForm value }, Cmd.none )
+            let
+                _ =
+                    Debug.log "fieldType" fieldType
+            in
+                ( { model | threatForm = updateThreatForm fieldType model.threatForm value }, Cmd.none )
 
         GoToConfirmationPage ->
             ( { model | currentPage = ConfirmationPage }, Cmd.none )
 
         GoToDashboardPage ->
             ( { model | currentPage = DashboardPage }, Cmd.none )
+
+        SubmitThreatForm ->
+            ( model, submitThreatForm )
+
+        CreateRecordResponse (Ok _) ->
+            ( { model | currentPage = ConfirmationPage }, Cmd.none )
+
+        CreateRecordResponse (Err error) ->
+            model |> updateError error
 
 
 updateThreatForm : ThreatInput -> ThreatFormData -> String -> ThreatFormData
@@ -149,6 +163,34 @@ decodeRecord =
         (Decode.field "id" Decode.string)
         (Decode.field "last_modified" Decode.int)
     )
+
+
+encodeFormData : ThreatFormData -> Encode.Value
+encodeFormData formData =
+    Encode.object
+        [ ( "objectives_at_stake", Encode.list <| Set.map Encode.string formData.threat_objectives_at_stake )
+        , ( "project_package", Encode.string formData.threat_project_package )
+        , ( "type", Encode.string formData.threat_type )
+        , ( "description", Encode.string formData.threat_description )
+        , ( "title", Encode.string formData.threat_title )
+        , ( "cause", Encode.string formData.threat_cause )
+        , ( "impact_schedule", Encode.string formData.threat_impact_schedule )
+        , ( "impact_cost", Encode.string formData.threat_impact_cost )
+        , ( "impact_performance", Encode.string formData.threat_impact_performance )
+        , ( "probability", Encode.string formData.threat_probability )
+        , ( "mitigation", Encode.string formData.threat_mitigation )
+        ]
+
+
+submitThreatForm : String -> String -> ThreatFormData -> Cmd Msg
+submitThreatForm email password formData =
+    let
+        data =
+            encodeFormData formData
+    in
+        client email password
+            |> Kinto.create recordResource data
+            |> Kinto.send CreateRecordResponse
 
 
 
@@ -231,7 +273,7 @@ navigation currentPage =
                     , li
                         []
                         [ a
-                            [ href "#" ]
+                            [ href "#", onClick GoToThreatForm ]
                             [ text "New threat" ]
                         ]
                     , li

@@ -61,6 +61,8 @@ type Msg
     | ThreatFieldChange ThreatInput String
     | GoToConfirmationPage
     | GoToDashboardPage
+    | SubmitThreatForm
+    | CreateRecordResponse (Result Kinto.Error Record)
 
 
 type ThreatInput
