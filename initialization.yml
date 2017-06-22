@@ -1,4 +1,9 @@
 focus:
+  permissions:
+    write:
+      - account:marianne
+      - account:natim
+      - account:guillaume
   collections:
     threats:
       permissions:
