@@ -29,25 +29,15 @@ loginForm email password loginError =
                     [ class "row row--login" ]
                     [ div
                         [ class "col-md-6 right" ]
-                        [ img
-                            [ class "img-responsive", src "img/loyd.png", alt "" ]
-                            []
-                        , h1
-                            []
-                            [ text "Focus" ]
-                        , h2
-                            []
-                            [ text "Risk management" ]
-                        , h3
-                            []
-                            [ text "Get involved!" ]
+                        [ img [ class "img-responsive", src "img/loyd.png", alt "" ] []
+                        , h1 [] [ text "Focus" ]
+                        , h2 [] [ text "Risk management" ]
+                        , h3 [] [ text "Get involved!" ]
                         ]
                     , error
                     , div
                         [ class "col-md-6 left" ]
-                        [ h1
-                            []
-                            [ text "LOGIN" ]
+                        [ h1 [] [ text "LOGIN" ]
                         , div
                             [ class "form-group" ]
                             [ h2
@@ -62,9 +52,7 @@ loginForm email password loginError =
                                 , onInput NewEmail
                                 ]
                                 []
-                            , h2
-                                []
-                                [ text "PASSWORD" ]
+                            , h2 [] [ text "PASSWORD" ]
                             , input
                                 [ type_ "password"
                                 , class "form-control"
