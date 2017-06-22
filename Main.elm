@@ -476,7 +476,7 @@ threatForm =
                     [ class "row" ]
                     [ h2
                         []
-                        [ text "Describe the threat"
+                        [ text "Describe the threat "
                         , span
                             [ class "num-section" ]
                             [ text "(1/5)" ]
@@ -653,7 +653,7 @@ threatForm =
                 [ class "container" ]
                 [ h2
                     []
-                    [ text "Define a title"
+                    [ text "Define a title "
                     , span
                         [ class "num-section" ]
                         [ text "(2/5)" ]
@@ -675,7 +675,7 @@ threatForm =
                 [ class "container" ]
                 [ h2
                     []
-                    [ text "Identify the cause"
+                    [ text "Identify the cause "
                     , span
                         [ class "num-section" ]
                         [ text "(3/5)" ]
@@ -699,7 +699,7 @@ threatForm =
                     [ class "row" ]
                     [ h2
                         []
-                        [ text "Assess impact and probability"
+                        [ text "Assess impact and probability "
                         , span
                             [ class "num-section" ]
                             [ text "(4/5)" ]
@@ -931,7 +931,7 @@ threatForm =
                     [ class "row" ]
                     [ h2
                         []
-                        [ text "Recommend mitigation"
+                        [ text "Recommend mitigation "
                         , span
                             [ class "num-section" ]
                             [ text "(5/5)" ]
