@@ -10,6 +10,7 @@ type alias Model =
     , error : Maybe String
     , currentPage : Pages
     , threatForm : ThreatFormData
+    , risksPager : Maybe (Kinto.Pager Risk)
     }
 
 
@@ -57,8 +58,8 @@ type Msg
     = NewEmail String
     | NewPassword String
     | Login
-    | FetchRecordsResponse (Result Kinto.Error (Kinto.Pager Record))
-    | CreateRecordResponse (Result Kinto.Error Record)
+    | FetchRecordsResponse (Result Kinto.Error (Kinto.Pager Risk))
+    | CreateRecordResponse (Result Kinto.Error Risk)
     | GoToConfirmationPage
     | GoToDashboardPage
     | GoToHomePage
@@ -83,7 +84,15 @@ type ThreatInput
     | ThreatMitigation
 
 
-type alias Record =
+type alias Risk =
     { id : String
     , last_modified : Int
+    , title : String
+    , admin : RiskAdmin
+    }
+
+
+type alias RiskAdmin =
+    { comment : String
+    , status : String
     }

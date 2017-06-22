@@ -9,6 +9,7 @@ import Json.Encode as Encode
 import Kinto
 import Set
 import LoginForm exposing (loginForm)
+import Json.Decode.Pipeline as JP
 
 
 init : ( Model, Cmd Msg )
@@ -18,6 +19,7 @@ init =
       , password = Nothing
       , error = Nothing
       , threatForm = emptyThreatForm
+      , risksPager = Nothing
       }
     , Cmd.none
     )
@@ -47,13 +49,33 @@ update msg model =
                             ( { model | error = Just "Please enter a password" }, Cmd.none )
 
                         Just password ->
-                            ( model, validateLogin email password )
+                            let
+                                client =
+                                    getKintoClient email password
+                            in
+                                ( { model
+                                    | risksPager = Just <| Kinto.emptyPager client recordResource
+                                  }
+                                , validateLogin client
+                                )
 
-        FetchRecordsResponse (Ok records) ->
-            ( { model | error = Nothing, currentPage = HomePage }, Cmd.none )
+        FetchRecordsResponse (Ok newPager) ->
+            ( { model
+                | error = Nothing
+                , currentPage = HomePage
+                , risksPager =
+                    case model.risksPager of
+                        Just pager ->
+                            Just <| Kinto.updatePager newPager pager
+
+                        Nothing ->
+                            Just <| newPager
+              }
+            , Cmd.none
+            )
 
         FetchRecordsResponse (Err (Kinto.KintoError 401 _ error)) ->
-            ( { model | error = Just "Bad email and password. Try again." }, Cmd.none )
+            ( { model | error = Just "Bad email and password. Try again.", password = Nothing }, Cmd.none )
 
         FetchRecordsResponse (Err (Kinto.KintoError 403 _ error)) ->
             ( { model | error = Just "Call your administrator. The site is not configured yet." }, Cmd.none )
@@ -78,7 +100,7 @@ update msg model =
             ( { model | currentPage = HomePage }, Cmd.none )
 
         GoToLoginPage ->
-            ( { model | currentPage = LoginPage }, Cmd.none )
+            ( { model | currentPage = LoginPage, password = Nothing }, Cmd.none )
 
         GoToOpportunityForm ->
             ( { model | currentPage = OpportunityForm }, Cmd.none )
@@ -151,32 +173,40 @@ updateError error model =
     ( { model | error = Just <| toString error }, Cmd.none )
 
 
-client : String -> String -> Kinto.Client
-client email password =
+getKintoClient : String -> String -> Kinto.Client
+getKintoClient email password =
     Kinto.client
         "https://focus-risk.alwaysdata.net/v1/"
         (Kinto.Basic email password)
 
 
-validateLogin : String -> String -> Cmd Msg
-validateLogin email password =
-    client email password
+validateLogin : Kinto.Client -> Cmd Msg
+validateLogin client =
+    client
         |> Kinto.getList recordResource
         |> Kinto.sortBy [ "-last_modified" ]
         |> Kinto.send FetchRecordsResponse
 
 
-recordResource : Kinto.Resource Record
+recordResource : Kinto.Resource Risk
 recordResource =
     Kinto.recordResource "focus" "threats" decodeRecord
 
 
-decodeRecord : Decode.Decoder Record
+decodeRecord : Decode.Decoder Risk
 decodeRecord =
-    (Decode.map2 Record
-        (Decode.field "id" Decode.string)
-        (Decode.field "last_modified" Decode.int)
-    )
+    JP.decode Risk
+        |> JP.required "id" Decode.string
+        |> JP.required "last_modified" Decode.int
+        |> JP.required "title" Decode.string
+        |> JP.optional "admin" decodeRiskAdmin { comment = "", status = "Pending" }
+
+
+decodeRiskAdmin : Decode.Decoder RiskAdmin
+decodeRiskAdmin =
+    JP.decode RiskAdmin
+        |> JP.optional "comment" Decode.string ""
+        |> JP.required "status" Decode.string
 
 
 encodeFormData : ThreatFormData -> Encode.Value
@@ -202,7 +232,7 @@ submitThreatForm email password formData =
         data =
             encodeFormData formData
     in
-        client email password
+        getKintoClient email password
             |> Kinto.create recordResource data
             |> Kinto.send CreateRecordResponse
 
@@ -215,7 +245,7 @@ view : Model -> Html Msg
 view model =
     case model.currentPage of
         LoginPage ->
-            loginForm model.error
+            loginForm model.email model.password model.error
 
         HomePage ->
             div []
@@ -242,10 +272,19 @@ view model =
                 ]
 
         DashboardPage ->
-            div []
-                [ navigation model.currentPage
-                , dashboardPage
-                ]
+            let
+                page =
+                    case model.risksPager of
+                        Nothing ->
+                            dashboardPage []
+
+                        Just pager ->
+                            dashboardPage pager.objects
+            in
+                div []
+                    [ navigation model.currentPage
+                    , page
+                    ]
 
 
 navigation : Pages -> Html Msg
@@ -1550,8 +1589,8 @@ confirmationPage =
         ]
 
 
-dashboardPage : Html Msg
-dashboardPage =
+dashboardPage : List Risk -> Html Msg
+dashboardPage risks =
     div
         [ class "block" ]
         [ div
@@ -1559,6 +1598,7 @@ dashboardPage =
             [ h1
                 []
                 [ text "Dashboard" ]
+            , ul [] <| List.map (\x -> li [] [ text x.title ]) risks
             ]
         ]
 

@@ -6,8 +6,8 @@ import Html.Events exposing (..)
 import Types exposing (Msg(..))
 
 
-loginForm : Maybe String -> Html Msg
-loginForm loginError =
+loginForm : Maybe String -> Maybe String -> Maybe String -> Html Msg
+loginForm email password loginError =
     let
         error =
             case loginError of
@@ -55,6 +55,7 @@ loginForm loginError =
                                 [ text "EMAIL ADDRESS" ]
                             , input
                                 [ type_ "email"
+                                , value <| Maybe.withDefault "" email
                                 , class "form-control"
                                 , placeholder ""
                                 , id "email"
@@ -67,6 +68,7 @@ loginForm loginError =
                             , input
                                 [ type_ "password"
                                 , class "form-control"
+                                , value <| Maybe.withDefault "" password
                                 , placeholder ""
                                 , id "password"
                                 , onInput NewPassword
