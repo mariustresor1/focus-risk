@@ -48,6 +48,7 @@ type Pages
     = LoginPage
     | HomePage
     | ThreatForm
+    | OpportunityForm
     | ConfirmationPage
     | DashboardPage
 
@@ -57,12 +58,15 @@ type Msg
     | NewPassword String
     | Login
     | FetchRecordsResponse (Result Kinto.Error (Kinto.Pager Record))
-    | GoToThreatForm
-    | ThreatFieldChange ThreatInput String
+    | CreateRecordResponse (Result Kinto.Error Record)
     | GoToConfirmationPage
     | GoToDashboardPage
+    | GoToHomePage
+    | GoToLoginPage
+    | GoToOpportunityForm
+    | GoToThreatForm
     | SubmitThreatForm
-    | CreateRecordResponse (Result Kinto.Error Record)
+    | ThreatFieldChange ThreatInput String
 
 
 type ThreatInput
