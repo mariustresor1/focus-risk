@@ -20,3 +20,7 @@ debug: install
 clean:
 	rm -fr elm-stuff node_modules
 	rm -f app.js
+
+update-admin:
+	sed -i 's/\t/    /g' initialization.yml
+	kinto-wizard load --server https://focus-risk.alwaysdata.net/v1 --auth marianne initialization.yml

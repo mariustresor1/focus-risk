@@ -1,0 +1,117 @@
+focus:
+  collections:
+    threats:
+      permissions:
+        record:create:
+          - system.Authenticated
+      data:
+        displayFields:
+          - id
+          - title
+          - description
+        schema:
+          title: Threat
+          description: Threat report.
+          type: object
+          additionalProperties: false
+          required:
+            - type
+            - cause
+            - title
+            - description
+            - impact_cost
+            - probability
+            - impact_schedule
+            - project_package
+            - impact_performance
+            - objectives_at_stake
+            - mitigation
+          properties:
+            admin:
+              type: object
+              title: Administrative
+              additionalProperties: false
+              required:
+                - status
+              default:
+                status: "Pending"
+              properties:
+                comment:
+                  type: string
+                  title: Comment
+                status:
+                  type: string
+                  title: status
+                  enum:
+                    - Draft
+                    - Pending
+                    - Closed
+                    - Rejected
+            type:
+              type: string
+              title: Type of risk
+              description: What type of risk is it?
+            cause:
+              type: string
+              title: Identify the cause
+              description: Identified cause already existing.
+            title:
+              type: string
+              title: Title
+              description: Choose a descriptive title.
+            description:
+              type: string
+              title: Description
+              description: Describe what is this risk about
+            impact_cost:
+              type: string
+              title: Impact cost
+            probability:
+              type: string
+              title: Probability
+              description: Guess the probability of occurence
+            impact_schedule:
+              type: string
+              title: Impact schedule
+            project_package:
+              type: string
+              title: Project package in charge
+            mitigation:
+              type: string
+              title: Recommend mitigation
+            impact_performance:
+              type: string
+              title: Impact performance
+            objectives_at_stake:
+              type: array
+              title: Objectives at stake
+              description: Which objective(s) of the organisation does the risk impact?
+              items:
+                type: string
+                title: Objective
+        uiSchema:
+          ui:order:
+            - admin
+            - objectives_at_stake
+            - project_package
+            - type
+            - description
+            - title
+            - cause
+            - impact_schedule
+            - impact_cost
+            - impact_performance
+            - probability
+            - mitigation
+          admin:
+            ui:order:
+              - status
+              - comment
+            comment:
+              ui:widget: textarea
+          description:
+            ui:widget: textarea
+          cause:
+            ui:widget: textarea
+          mitigation:
+            ui:widget: textarea
