@@ -2,15 +2,13 @@ module Main exposing (..)
 
 import Types exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Kinto
 import Set
 import LoginForm exposing (loginForm)
 import NavigationBar exposing (navigation)
-import ThreatForm exposing (updateThreatForm, threatForm, opportunityForm)
+import ThreatForm exposing (updateThreatForm, threatForm, opportunityForm, formIsComplete)
 import HomePage exposing (homePage)
 import ConfirmationPage exposing (confirmationPage)
 import DashboardPage exposing (dashboardPage)
@@ -117,7 +115,14 @@ update msg model =
         SubmitThreatForm ->
             case ( model.email, model.password ) of
                 ( Just email, Just password ) ->
-                    ( model, submitThreatForm email password model.threatForm )
+                    if formIsComplete model.threatForm then
+                        ( model, submitThreatForm email password model.threatForm )
+                    else
+                        ( { model
+                            | error = Just "Please make sure to fill all the fields."
+                          }
+                        , Cmd.none
+                        )
 
                 _ ->
                     ( { model | currentPage = LoginPage }, Cmd.none )
@@ -232,7 +237,7 @@ view model =
         ThreatForm ->
             div []
                 [ navigation model.currentPage
-                , threatForm
+                , threatForm model.error
                 ]
 
         OpportunityForm ->
