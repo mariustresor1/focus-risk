@@ -4,6 +4,8 @@ elm-live := node_modules/.bin/elm-live
 uglifyjs := node_modules/.bin/uglifyjs
 gh-pages := node_modules/.bin/gh-pages
 
+.ignore: build clean
+
 $(elm-package):
 	npm install elm elm-live uglify-js gh-pages
 
@@ -16,12 +18,11 @@ $(elm-package):
 install: elm-package.json $(elm-package)
 	$(elm-package) install
 
-build/app.js: $(elm-package)
-	rm -fr build/
-	mkdir build/
-	cp -fr public/* build/
+build: clean-build build/app.js
 
-build: build/app.js
+build/app.js: $(elm-package) src/Main.elm
+	mkdir -p build/
+	cp -fr public/* build/
 	$(elm-make) src/Main.elm --output build/app.js
 
 optimize: build/app.js
@@ -33,10 +34,15 @@ live: install
 debug: install
 	$(elm-live) src/Main.elm --warn --dir=public/ --output=public/app.js --open --debug
 
-clean:
-	rm -fr elm-stuff node_modules .venv build/ public/app.js
+
+clean-build:
+	rm -fr build/
+
+clean: clean-build
+	rm -fr elm-stuff node_modules .venv public/app.js
 
 deploy: build optimize
+	cat "risk-focus.com" > build/CNAME
 	$(gh-pages) --dist build/
 
 update-admin: .venv/bin/kinto-wizard
