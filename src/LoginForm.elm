@@ -1,6 +1,6 @@
 module LoginForm exposing (..)
 
-import Html exposing (..)
+import Html exposing (div, input, button, form, h1, h2, h3, a, Html, text, img, strong)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Types exposing (Msg(..))
@@ -38,39 +38,39 @@ loginForm email password loginError =
                     , div
                         [ class "col-md-6 left" ]
                         [ h1 [] [ text "LOGIN" ]
-                        , div
-                            [ class "form-group" ]
-                            [ h2
-                                []
-                                [ text "EMAIL ADDRESS" ]
-                            , input
-                                [ type_ "email"
-                                , value <| Maybe.withDefault "" email
-                                , class "form-control"
-                                , placeholder ""
-                                , id "email"
-                                , onInput NewEmail
+                        , Html.form [ onSubmit Login ]
+                            [ div
+                                [ class "form-group" ]
+                                [ h2
+                                    []
+                                    [ text "EMAIL ADDRESS" ]
+                                , input
+                                    [ value <| Maybe.withDefault "" email
+                                    , class "form-control"
+                                    , placeholder ""
+                                    , id "email"
+                                    , onInput NewEmail
+                                    ]
+                                    []
+                                , h2 [] [ text "PASSWORD" ]
+                                , input
+                                    [ type_ "password"
+                                    , class "form-control"
+                                    , value <| Maybe.withDefault "" password
+                                    , placeholder ""
+                                    , id "password"
+                                    , onInput NewPassword
+                                    ]
+                                    []
                                 ]
-                                []
-                            , h2 [] [ text "PASSWORD" ]
-                            , input
-                                [ type_ "password"
-                                , class "form-control"
-                                , value <| Maybe.withDefault "" password
-                                , placeholder ""
-                                , id "password"
-                                , onInput NewPassword
+                            , div
+                                [ class "row row--login" ]
+                                [ button
+                                    [ class "btn blue-circle-button"
+                                    , onClick Login
+                                    ]
+                                    [ text "LOGIN" ]
                                 ]
-                                []
-                            ]
-                        , div
-                            [ class "row row--login" ]
-                            [ a
-                                [ href "#"
-                                , class "btn blue-circle-button"
-                                , onClick Login
-                                ]
-                                [ text "LOGIN" ]
                             ]
                         ]
                     ]
