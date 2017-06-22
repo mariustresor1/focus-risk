@@ -170,7 +170,7 @@ label {
     margin-right: auto;
     margin-left: auto;
     padding-bottom: 10%;
-    padding-top: 20%;
+    padding-top: 0%;
 }
 
 .row {
@@ -224,7 +224,11 @@ label {
 }
 
 .navbar-default .navbar-nav>li>a:active {
-    color: #3A48AC;
+    color: #3A48AC
+}
+
+.navbar-default .navbar-nav>li>a:focus {
+    color: #6F80F4
 }
 
 .legende {
@@ -705,6 +709,7 @@ p.labelperso {
 
 .container--dashboard-table {
     padding-top: 0px;
+    padding-bottom: 0px;
 } 
 
 /* ======================================================================

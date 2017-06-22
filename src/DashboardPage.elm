@@ -63,11 +63,13 @@ badge status =
     case status of
         "Closed" ->
             [ i [ class "fa fa-check-circle", style [ ( "color", "green" ) ] ] []
+            , text " "
             , text status
             ]
 
         "Rejected" ->
             [ i [ class "fa fa-times-circle", style [ ( "color", "red" ) ] ] []
+            , text " "
             , text status
             ]
 

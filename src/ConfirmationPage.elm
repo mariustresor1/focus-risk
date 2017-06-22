@@ -20,10 +20,12 @@ confirmationPage =
                 [ text "We confirm that your input has been recorded. We will inform you of the follow-up given soon." ]
             , p
                 [ class "lead" ]
-                [ text "For any request or query about the process, you can contact your dedicated risk manager:"
+                [ text "For any request or query about the process, you can contact your dedicated risk manager: "
                 , a
                     [ href "mailto:contact@risk-focus.com" ]
-                    [ text "contact@risk-focus.com." ]
+                    [ text "contact@risk-focus.com" ]
+                , text
+                    "."
                 ]
             ]
         , div

@@ -42,7 +42,7 @@ loginForm email password loginError =
                             [ class "form-group" ]
                             [ h2
                                 []
-                                [ text "EMAIL ADDRESS" ]
+                                [ text "USERNAME" ]
                             , input
                                 [ type_ "email"
                                 , value <| Maybe.withDefault "" email

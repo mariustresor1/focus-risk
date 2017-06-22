@@ -2,8 +2,6 @@ module Main exposing (..)
 
 import Types exposing (..)
 import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Kinto
