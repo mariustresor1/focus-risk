@@ -42,7 +42,7 @@ clean: clean-build
 	rm -fr elm-stuff node_modules .venv public/app.js
 
 deploy: build optimize
-	cat "risk-focus.com" > build/CNAME
+	cat "www.risk-focus.com" > build/CNAME
 	$(gh-pages) --dist build/
 
 update-admin: .venv/bin/kinto-wizard
