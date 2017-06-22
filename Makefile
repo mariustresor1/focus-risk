@@ -6,13 +6,13 @@ $(elm-package):
 	npm install elm elm-live
 
 .venv/bin/python:
+	virtualenv .venv/
 	.venv/bin/pip install six requests kinto-wizard
 
 .venv/bin/kinto-wizard: .venv/bin/python
 
 install: elm-package.json $(elm-package)
 	$(elm-package) install
-	virtualenv .venv/
 
 
 build:
