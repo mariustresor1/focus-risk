@@ -31,12 +31,14 @@ navigation currentPage =
                         [ class "icon-bar" ]
                         []
                     ]
-                , img
-                    [ class "img-responsive navbar-minilogo", src "img/loyd.png", alt "" ]
-                    []
-                , p
-                    [ class "legende" ]
-                    [ text "Focus by Loyd Consult" ]
+                , a [ href "#", onClick GoToHomePage ]
+                    [ img
+                        [ class "img-responsive navbar-minilogo", src "img/loyd.png", alt "" ]
+                        []
+                    , p
+                        [ class "legende" ]
+                        [ text "Focus by Loyd Consult" ]
+                    ]
                 ]
             , div
                 [ class "collapse navbar-collapse", id "bs-example-navbar-collapse-1" ]
