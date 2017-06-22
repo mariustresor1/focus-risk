@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Date
 import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -20,6 +21,7 @@ init =
       , error = Nothing
       , threatForm = emptyThreatForm
       , risksPager = Nothing
+      , nextPage = HomePage
       }
     , Cmd.none
     )
@@ -56,13 +58,13 @@ update msg model =
                                 ( { model
                                     | risksPager = Just <| Kinto.emptyPager client recordResource
                                   }
-                                , validateLogin client
+                                , fetchRisksList client
                                 )
 
         FetchRecordsResponse (Ok newPager) ->
             ( { model
                 | error = Nothing
-                , currentPage = HomePage
+                , currentPage = model.nextPage
                 , risksPager =
                     case model.risksPager of
                         Just pager ->
@@ -117,7 +119,22 @@ update msg model =
                     ( { model | currentPage = LoginPage }, Cmd.none )
 
         CreateRecordResponse (Ok _) ->
-            ( { model | currentPage = ConfirmationPage }, Cmd.none )
+            case ( model.email, model.password ) of
+                ( Just email, Just password ) ->
+                    let
+                        client =
+                            getKintoClient email password
+                    in
+                        ( { model
+                            | risksPager = Just <| Kinto.emptyPager client recordResource
+                            , currentPage = ConfirmationPage
+                            , nextPage = ConfirmationPage
+                          }
+                        , fetchRisksList client
+                        )
+
+                _ ->
+                    ( { model | currentPage = LoginPage }, Cmd.none )
 
         CreateRecordResponse (Err error) ->
             model |> updateError error
@@ -180,8 +197,8 @@ getKintoClient email password =
         (Kinto.Basic email password)
 
 
-validateLogin : Kinto.Client -> Cmd Msg
-validateLogin client =
+fetchRisksList : Kinto.Client -> Cmd Msg
+fetchRisksList client =
     client
         |> Kinto.getList recordResource
         |> Kinto.sortBy [ "-last_modified" ]
@@ -1591,16 +1608,70 @@ confirmationPage =
 
 dashboardPage : List Risk -> Html Msg
 dashboardPage risks =
-    div
-        [ class "block" ]
-        [ div
-            [ class "container" ]
-            [ h1
-                []
-                [ text "Dashboard" ]
-            , ul [] <| List.map (\x -> li [] [ text x.title ]) risks
+    div []
+        [ div [ class "block" ]
+            [ div
+                [ class "container" ]
+                [ h1
+                    []
+                    [ text "Your personal dashboard" ]
+                ]
+            ]
+        , div [ class "container-fluid container-dashboard-table" ]
+            [ div [ class "row" ]
+                [ div [ class "col-sm-12" ]
+                    [ div [ class "white-box" ]
+                        [ div [ class "table-responsive" ]
+                            [ table [ class "table" ]
+                                [ thead []
+                                    [ tr []
+                                        [ th [] [ text "#" ]
+                                        , th [] [ text "Report date" ]
+                                        , th [] [ text "Title" ]
+                                        , th [] [ text "Comment" ]
+                                        , th [] [ text "Status" ]
+                                        ]
+                                    ]
+                                , tbody [] <| List.map tableRow risks
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             ]
         ]
+
+
+tableRow : Risk -> Html Msg
+tableRow risk =
+    let
+        date =
+            Date.fromTime <| toFloat risk.last_modified
+    in
+        tr []
+            [ td [] [ text risk.id ]
+            , td [] [ text <| toString date ]
+            , td [] [ text risk.title ]
+            , td [] [ text risk.admin.comment ]
+            , td [] <| badge risk.admin.status
+            ]
+
+
+badge : String -> List (Html Msg)
+badge status =
+    case status of
+        "Closed" ->
+            [ i [ class "fa fa-check-circle", style [ ( "color", "green" ) ] ] []
+            , text status
+            ]
+
+        "Rejected" ->
+            [ i [ class "fa fa-times-circle", style [ ( "color", "red" ) ] ] []
+            , text status
+            ]
+
+        _ ->
+            [ text status ]
 
 
 

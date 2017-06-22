@@ -11,6 +11,7 @@ type alias Model =
     , currentPage : Pages
     , threatForm : ThreatFormData
     , risksPager : Maybe (Kinto.Pager Risk)
+    , nextPage : Pages
     }
 
 
