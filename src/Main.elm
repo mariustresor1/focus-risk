@@ -138,6 +138,7 @@ update msg model =
                             | risksPager = Just <| Kinto.emptyPager client recordResource
                             , currentPage = ConfirmationPage
                             , nextPage = ConfirmationPage
+                            , threatForm = emptyThreatForm
                           }
                         , fetchRisksList client
                         )
@@ -243,7 +244,7 @@ view model =
         OpportunityForm ->
             div []
                 [ navigation model.currentPage
-                , opportunityForm
+                , opportunityForm model.error
                 ]
 
         ConfirmationPage ->
