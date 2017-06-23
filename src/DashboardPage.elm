@@ -3,8 +3,9 @@ module DashboardPage exposing (dashboardPage)
 import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Date
+import Time.TimeZones exposing (europe_paris)
+import Time.DateTime as DateTime exposing (DateTime)
+import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
 
 
 dashboardPage : List Risk -> Html Msg
@@ -47,11 +48,11 @@ tableRow : Risk -> Html Msg
 tableRow risk =
     let
         date =
-            Date.fromTime <| toFloat risk.last_modified
+            DateTime.fromTimestamp <| toFloat risk.last_modified
     in
         tr []
             [ td [] [ text risk.id ]
-            , td [] [ text <| toString date ]
+            , td [] [ text <| showDate date ]
             , td [] [ text risk.title ]
             , td [] [ text risk.admin.comment ]
             , td [] <| badge risk.admin.status
@@ -75,3 +76,39 @@ badge status =
 
         _ ->
             [ text status ]
+
+
+showDate : DateTime -> String
+showDate datetime =
+    let
+        zoned =
+            ZonedDateTime.fromDateTime (europe_paris ()) datetime
+
+        day =
+            ZonedDateTime.day zoned
+
+        month =
+            ZonedDateTime.month zoned
+
+        year =
+            ZonedDateTime.year zoned
+
+        hour =
+            ZonedDateTime.hour zoned
+
+        minute =
+            ZonedDateTime.minute zoned
+    in
+        (zfill day) ++ "/" ++ (zfill month) ++ "/" ++ (toString year) ++ " " ++ (zfill hour) ++ ":" ++ (zfill minute)
+
+
+zfill : Int -> String
+zfill value =
+    let
+        string =
+            toString value
+    in
+        if (String.length string) == 1 then
+            "0" ++ string
+        else
+            string
