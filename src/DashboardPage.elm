@@ -104,7 +104,15 @@ showDate datetime =
         minute =
             ZonedDateTime.minute zoned
     in
-        (zfill day) ++ "/" ++ (zfill month) ++ "/" ++ (toString year) ++ " " ++ (zfill hour) ++ ":" ++ (zfill minute)
+        (zfill day)
+            ++ "/"
+            ++ (zfill month)
+            ++ "/"
+            ++ (toString year)
+            ++ " "
+            ++ (zfill hour)
+            ++ ":"
+            ++ (zfill minute)
 
 
 zfill : Int -> String
