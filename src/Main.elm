@@ -8,7 +8,7 @@ import Kinto
 import Set
 import LoginForm exposing (loginForm)
 import NavigationBar exposing (navigation)
-import ThreatForm exposing (updateThreatForm, threatForm, opportunityForm)
+import ThreatForm exposing (updateThreatForm, threatForm, opportunityForm, formIsComplete)
 import HomePage exposing (homePage)
 import ConfirmationPage exposing (confirmationPage)
 import DashboardPage exposing (dashboardPage)
@@ -115,7 +115,14 @@ update msg model =
         SubmitThreatForm ->
             case ( model.email, model.password ) of
                 ( Just email, Just password ) ->
-                    ( model, submitThreatForm email password model.threatForm )
+                    if formIsComplete model.threatForm then
+                        ( model, submitThreatForm email password model.threatForm )
+                    else
+                        ( { model
+                            | error = Just "Please make sure to fill all the fields."
+                          }
+                        , Cmd.none
+                        )
 
                 _ ->
                     ( { model | currentPage = LoginPage }, Cmd.none )
@@ -131,6 +138,7 @@ update msg model =
                             | risksPager = Just <| Kinto.emptyPager client recordResource
                             , currentPage = ConfirmationPage
                             , nextPage = ConfirmationPage
+                            , threatForm = emptyThreatForm
                           }
                         , fetchRisksList client
                         )
@@ -230,13 +238,13 @@ view model =
         ThreatForm ->
             div []
                 [ navigation model.currentPage
-                , threatForm
+                , threatForm model.error
                 ]
 
         OpportunityForm ->
             div []
                 [ navigation model.currentPage
-                , opportunityForm
+                , opportunityForm model.error
                 ]
 
         ConfirmationPage ->
