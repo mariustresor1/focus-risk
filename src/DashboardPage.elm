@@ -3,45 +3,111 @@ module DashboardPage exposing (dashboardPage)
 import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Time.TimeZones exposing (europe_paris)
 import Time.DateTime as DateTime exposing (DateTime)
 import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
 
 
-dashboardPage : List Risk -> Html Msg
-dashboardPage risks =
-    div []
-        [ div [ class "block" ]
-            [ div
-                [ class "container" ]
-                [ h1
-                    []
-                    [ text "Your personal dashboard" ]
-                ]
-            ]
-        , div [ class "container-fluid container-dashboard-table" ]
-            [ div [ class "row" ]
-                [ div [ class "col-sm-12" ]
-                    [ div [ class "white-box" ]
-                        [ div [ class "table-responsive" ]
-                            [ table [ class "table" ]
-                                [ thead []
-                                    [ tr []
-                                        [ th [] [ text "#" ]
-                                        , th [] [ text "Report date" ]
-                                        , th [] [ text "Title" ]
-                                        , th [] [ text "Comment" ]
-                                        , th [] [ text "Status" ]
+dashboardPage : List Risk -> Maybe Risk -> Html Msg
+dashboardPage risks selectedRisk =
+    let
+        displayRisk =
+            case selectedRisk of
+                Nothing ->
+                    div [] []
+
+                Just risk ->
+                    div [ class "container-fluid container-dashboard-table", id "risk" ]
+                        [ div [ class "row" ]
+                            [ div [ class "col-sm-12" ]
+                                [ div [ class "white-box" ]
+                                    [ table []
+                                        [ tbody []
+                                            [ tr []
+                                                [ th [] [ text "Objectives" ]
+                                                , td [] [ text <| String.join ", " risk.objectives_at_stake ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Project Package" ]
+                                                , td [] [ text risk.project_package ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Type" ]
+                                                , td [] [ text risk.threat_type ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Description" ]
+                                                , td [] [ text risk.description ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Title" ]
+                                                , td [] [ text risk.title ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Cause" ]
+                                                , td [] [ text risk.cause ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Impact Schedule" ]
+                                                , td [] [ text risk.impact_schedule ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Impact Cost" ]
+                                                , td [] [ text risk.impact_cost ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Impact Performance" ]
+                                                , td [] [ text risk.impact_performance ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Probability" ]
+                                                , td [] [ text risk.probability ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Mitigation" ]
+                                                , td [] [ text risk.mitigation ]
+                                                ]
+                                            ]
                                         ]
                                     ]
-                                , tbody [] <| List.map tableRow risks
+                                ]
+                            ]
+                        ]
+    in
+        div []
+            [ div [ class "block" ]
+                [ div
+                    [ class "container" ]
+                    [ h1
+                        []
+                        [ text "Your personal dashboard" ]
+                    ]
+                ]
+            , div [ class "container-fluid container-dashboard-table" ]
+                [ div [ class "row" ]
+                    [ div [ class "col-sm-12" ]
+                        [ div [ class "white-box" ]
+                            [ div [ class "table-responsive" ]
+                                [ table [ class "table" ]
+                                    [ thead []
+                                        [ tr []
+                                            [ th [] [ text "#" ]
+                                            , th [] [ text "Report date" ]
+                                            , th [] [ text "Title" ]
+                                            , th [] [ text "Comment" ]
+                                            , th [] [ text "Status" ]
+                                            ]
+                                        ]
+                                    , tbody [] <| List.map tableRow risks
+                                    ]
                                 ]
                             ]
                         ]
                     ]
                 ]
+            , displayRisk
             ]
-        ]
 
 
 tableRow : Risk -> Html Msg
@@ -51,7 +117,7 @@ tableRow risk =
             DateTime.fromTimestamp <| toFloat risk.last_modified
     in
         tr []
-            [ td [] [ text <| formatID risk.id ]
+            [ td [] [ a [ href "#risk", onClick (SelectRisk risk) ] [ text <| formatID risk.id ] ]
             , td [] [ text <| showDate date ]
             , td [] [ text risk.title ]
             , td [] [ text risk.admin.comment ]
@@ -80,7 +146,7 @@ badge status =
 
 formatID : String -> String
 formatID id =
-    "RT-" ++ String.slice 0 3 id ++ "-" ++ String.slice 3 5 id
+    String.toUpper ("RT-" ++ String.slice 0 3 id ++ "-" ++ String.slice 3 5 id)
 
 
 showDate : DateTime -> String

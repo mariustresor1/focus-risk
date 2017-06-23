@@ -12,6 +12,7 @@ type alias Model =
     , threatForm : ThreatFormData
     , risksPager : Maybe (Kinto.Pager Risk)
     , nextPage : Pages
+    , selectedRisk : Maybe Risk
     }
 
 
@@ -69,6 +70,7 @@ type Msg
     | GoToThreatForm
     | SubmitThreatForm
     | ThreatFieldChange ThreatInput String
+    | SelectRisk Risk
 
 
 type ThreatInput
@@ -90,6 +92,16 @@ type alias Risk =
     , last_modified : Int
     , title : String
     , admin : RiskAdmin
+    , objectives_at_stake : List String
+    , project_package : String
+    , threat_type : String
+    , description : String
+    , cause : String
+    , impact_schedule : String
+    , impact_cost : String
+    , impact_performance : String
+    , probability : String
+    , mitigation : String
     }
 
 

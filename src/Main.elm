@@ -24,6 +24,7 @@ init =
       , threatForm = emptyThreatForm
       , risksPager = Nothing
       , nextPage = HomePage
+      , selectedRisk = Nothing
       }
     , Cmd.none
     )
@@ -149,6 +150,9 @@ update msg model =
         CreateRecordResponse (Err error) ->
             model |> updateError error
 
+        SelectRisk risk ->
+            ( { model | selectedRisk = Just risk }, Cmd.none )
+
 
 updateError : error -> Model -> ( Model, Cmd Msg )
 updateError error model =
@@ -182,6 +186,16 @@ decodeRecord =
         |> JP.required "last_modified" Decode.int
         |> JP.required "title" Decode.string
         |> JP.optional "admin" decodeRiskAdmin { comment = "", status = "Pending" }
+        |> JP.required "objectives_at_stake" (Decode.list Decode.string)
+        |> JP.required "project_package" Decode.string
+        |> JP.required "type" Decode.string
+        |> JP.required "description" Decode.string
+        |> JP.required "cause" Decode.string
+        |> JP.required "impact_schedule" Decode.string
+        |> JP.required "impact_cost" Decode.string
+        |> JP.required "impact_performance" Decode.string
+        |> JP.required "probability" Decode.string
+        |> JP.required "mitigation" Decode.string
 
 
 decodeRiskAdmin : Decode.Decoder RiskAdmin
@@ -258,10 +272,10 @@ view model =
                 page =
                     case model.risksPager of
                         Nothing ->
-                            dashboardPage []
+                            dashboardPage [] model.selectedRisk
 
                         Just pager ->
-                            dashboardPage pager.objects
+                            dashboardPage pager.objects model.selectedRisk
             in
                 div []
                     [ navigation model.currentPage
