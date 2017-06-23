@@ -51,7 +51,7 @@ tableRow risk =
             DateTime.fromTimestamp <| toFloat risk.last_modified
     in
         tr []
-            [ td [] [ text risk.id ]
+            [ td [] [ text <| formatID risk.id ]
             , td [] [ text <| showDate date ]
             , td [] [ text risk.title ]
             , td [] [ text risk.admin.comment ]
@@ -76,6 +76,11 @@ badge status =
 
         _ ->
             [ text status ]
+
+
+formatID : String -> String
+formatID id =
+    "RT-" ++ String.slice 0 3 id ++ "-" ++ String.slice 3 5 id
 
 
 showDate : DateTime -> String
