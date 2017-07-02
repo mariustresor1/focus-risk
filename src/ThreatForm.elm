@@ -602,15 +602,16 @@ threatForm threatFormError =
                                 ]
                                 [ text "Submit" ]
                             ]
-                        , div
-                            [ class "col-md-6 " ]
-                            [ a
-                                [ href "#"
-                                , class "btn blue-circle-button"
-                                , onClick GoToDashboardPage
-                                ]
-                                [ text "Save for later" ]
-                            ]
+
+                        -- , div
+                        --    [ class "col-md-6 " ]
+                        --    [ a
+                        --        [ href "#"
+                        --        , class "btn blue-circle-button"
+                        --        , onClick GoToDashboardPage
+                        --        ]
+                        --        [ text "Save for later" ]
+                        --    ]
                         ]
                     ]
                 ]
@@ -1141,15 +1142,16 @@ opportunityForm threatFormError =
                                 ]
                                 [ text "Submit" ]
                             ]
-                        , div
-                            [ class "col-md-6 " ]
-                            [ a
-                                [ href "#"
-                                , class "btn blue-circle-button"
-                                , onClick GoToDashboardPage
-                                ]
-                                [ text "Save for later" ]
-                            ]
+
+                        --, div
+                        --    [ class "col-md-6 " ]
+                        --    [ a
+                        --        [ href "#"
+                        --        , class "btn blue-circle-button"
+                        --        , onClick GoToDashboardPage
+                        --        ]
+                        --        [ text "Save for later" ]
+                        --    ]
                         ]
                     ]
                 ]

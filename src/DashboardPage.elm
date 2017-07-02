@@ -7,6 +7,9 @@ import Html.Events exposing (onClick)
 import Time.TimeZones exposing (europe_paris)
 import Time.DateTime as DateTime exposing (DateTime)
 import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
+import Dialog
+import Bootstrap.CDN as CDN
+import Bootstrap.Grid as Grid
 
 
 dashboardPage : List Risk -> Maybe Risk -> Html Msg
@@ -25,47 +28,51 @@ dashboardPage risks selectedRisk =
                                     [ table []
                                         [ tbody []
                                             [ tr []
-                                                [ th [] [ text "Objectives" ]
-                                                , td [] [ text <| String.join ", " risk.objectives_at_stake ]
+                                                [ th [] [ text "#" ]
+                                                , td [] [ text <| formatID risk.id ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Project Package" ]
-                                                , td [] [ text risk.project_package ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Type" ]
-                                                , td [] [ text risk.threat_type ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Description" ]
-                                                , td [] [ text risk.description ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Title" ]
+                                                [ th [] [ text "Title: " ]
                                                 , td [] [ text risk.title ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Cause" ]
+                                                [ th [] [ text "Description: " ]
+                                                , td [] [ text risk.description ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Objectives: " ]
+                                                , td [] [ text <| String.join ", " risk.objectives_at_stake ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Project Package: " ]
+                                                , td [] [ text risk.project_package ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Type: " ]
+                                                , td [] [ text risk.threat_type ]
+                                                ]
+                                            , tr []
+                                                [ th [] [ text "Cause: " ]
                                                 , td [] [ text risk.cause ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Impact Schedule" ]
+                                                [ th [] [ text "Impact Schedule: " ]
                                                 , td [] [ text risk.impact_schedule ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Impact Cost" ]
+                                                [ th [] [ text "Impact Cost: " ]
                                                 , td [] [ text risk.impact_cost ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Impact Performance" ]
+                                                [ th [] [ text "Impact Performance: " ]
                                                 , td [] [ text risk.impact_performance ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Probability" ]
+                                                [ th [] [ text "Probability: " ]
                                                 , td [] [ text risk.probability ]
                                                 ]
                                             , tr []
-                                                [ th [] [ text "Mitigation" ]
+                                                [ th [] [ text "Mitigation: " ]
                                                 , td [] [ text risk.mitigation ]
                                                 ]
                                             ]
@@ -107,7 +114,42 @@ dashboardPage risks selectedRisk =
                     ]
                 ]
             , displayRisk
+            , div
+                [ class "container container--button" ]
+                [ div
+                    [ class "row " ]
+                    [ div
+                        [ class "col-md-6 container--button--space" ]
+                        [ a
+                            [ href "#"
+                            , class "btn blue-circle-button"
+
+                            --, onClick SubmitThreatForm
+                            ]
+                            [ text "test" ]
+                        ]
+                    ]
+                , div
+                    [ class "container " ]
+                    [ h2 [] [ text ("test popup") ]
+                    , button
+                        [ class "btn btn-info"
+                        , onClick DisplayPopup
+                        ]
+                        [ text "Display popup" ]
+                    , Dialog.view
+                        (if model.showDialog then
+                            Just (dialogConfig model)
+                         else
+                            Nothing
+                        )
+                    ]
+                ]
             ]
+
+
+
+-- Creation of the table of risks and opportunities
 
 
 tableRow : Risk -> Html Msg
@@ -123,6 +165,10 @@ tableRow risk =
             , td [] [ text risk.admin.comment ]
             , td [] <| badge risk.admin.status
             ]
+
+
+
+-- Font Awesome badges for status display
 
 
 badge : String -> List (Html Msg)
@@ -144,9 +190,17 @@ badge status =
             [ text status ]
 
 
+
+-- Record ID display format
+
+
 formatID : String -> String
 formatID id =
-    String.toUpper ("RT-" ++ String.slice 0 3 id ++ "-" ++ String.slice 3 5 id)
+    String.toUpper ("RI-" ++ String.slice 0 3 id ++ "-" ++ String.slice 3 5 id)
+
+
+
+-- Record date creation display format
 
 
 showDate : DateTime -> String
@@ -191,3 +245,24 @@ zfill value =
             "0" ++ string
         else
             string
+
+
+
+-- popup
+
+
+dialogConfig : Model -> Dialog.Config Msg
+dialogConfig model =
+    { closeMessage = Just Acknowledge
+    , containerClass = Nothing
+    , header = Just (h3 [] [ text "header test" ])
+    , body = Just (text "body test ")
+    , footer =
+        Just
+            (button
+                [ class "btn btn-success"
+                , onClick Acknowledge
+                ]
+                [ text "OK" ]
+            )
+    }
