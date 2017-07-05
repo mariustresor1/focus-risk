@@ -6,6 +6,9 @@ import Html.Events exposing (..)
 import Types exposing (Msg(..))
 
 
+-- view
+
+
 loginForm : Maybe String -> Maybe String -> Maybe String -> Html Msg
 loginForm email password loginError =
     let
@@ -67,7 +70,6 @@ loginForm email password loginError =
                                 [ class "row row--login" ]
                                 [ button
                                     [ class "btn blue-circle-button"
-                                    , onClick Login
                                     ]
                                     [ text "LOGIN" ]
                                 ]

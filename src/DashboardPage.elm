@@ -1,5 +1,6 @@
 module DashboardPage exposing (dashboardPage)
 
+import Dialog
 import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -7,9 +8,6 @@ import Html.Events exposing (onClick)
 import Time.TimeZones exposing (europe_paris)
 import Time.DateTime as DateTime exposing (DateTime)
 import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
-import Dialog
-import Bootstrap.CDN as CDN
-import Bootstrap.Grid as Grid
 
 
 dashboardPage : List Risk -> Maybe Risk -> Html Msg
@@ -21,66 +19,69 @@ dashboardPage risks selectedRisk =
                     div [] []
 
                 Just risk ->
-                    div [ class "container-fluid container-dashboard-table", id "risk" ]
-                        [ div [ class "row" ]
-                            [ div [ class "col-sm-12" ]
-                                [ div [ class "white-box" ]
-                                    [ table []
-                                        [ tbody []
-                                            [ tr []
-                                                [ th [] [ text "#" ]
-                                                , td [] [ text <| formatID risk.id ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Title: " ]
-                                                , td [] [ text risk.title ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Description: " ]
-                                                , td [] [ text risk.description ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Objectives: " ]
-                                                , td [] [ text <| String.join ", " risk.objectives_at_stake ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Project Package: " ]
-                                                , td [] [ text risk.project_package ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Type: " ]
-                                                , td [] [ text risk.threat_type ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Cause: " ]
-                                                , td [] [ text risk.cause ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Impact Schedule: " ]
-                                                , td [] [ text risk.impact_schedule ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Impact Cost: " ]
-                                                , td [] [ text risk.impact_cost ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Impact Performance: " ]
-                                                , td [] [ text risk.impact_performance ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Probability: " ]
-                                                , td [] [ text risk.probability ]
-                                                ]
-                                            , tr []
-                                                [ th [] [ text "Mitigation: " ]
-                                                , td [] [ text risk.mitigation ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
+                    Dialog.view <| Just (dialogConfig risk)
+
+        {- div [ class "container-fluid container-dashboard-table", id "risk" ]
+           [ div [ class "row" ]
+               [ div [ class "col-sm-12" ]
+                   [ div [ class "white-box" ]
+                       [ table []
+                           [ tbody []
+                               [ tr []
+                                   [ th [] [ text "#" ]
+                                   , td [] [ text <| formatID risk.id ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Title: " ]
+                                   , td [] [ text risk.title ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Description: " ]
+                                   , td [] [ text risk.description ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Objectives: " ]
+                                   , td [] [ text <| String.join ", " risk.objectives_at_stake ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Project Package: " ]
+                                   , td [] [ text risk.project_package ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Type: " ]
+                                   , td [] [ text risk.threat_type ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Cause: " ]
+                                   , td [] [ text risk.cause ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Impact Schedule: " ]
+                                   , td [] [ text risk.impact_schedule ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Impact Cost: " ]
+                                   , td [] [ text risk.impact_cost ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Impact Performance: " ]
+                                   , td [] [ text risk.impact_performance ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Probability: " ]
+                                   , td [] [ text risk.probability ]
+                                   ]
+                               , tr []
+                                   [ th [] [ text "Mitigation: " ]
+                                   , td [] [ text risk.mitigation ]
+                                   ]
+                               ]
+                           ]
+                       ]
+                   ]
+               ]
+           ]
+        -}
     in
         div []
             [ div [ class "block" ]
@@ -114,37 +115,6 @@ dashboardPage risks selectedRisk =
                     ]
                 ]
             , displayRisk
-            , div
-                [ class "container container--button" ]
-                [ div
-                    [ class "row " ]
-                    [ div
-                        [ class "col-md-6 container--button--space" ]
-                        [ a
-                            [ href "#"
-                            , class "btn blue-circle-button"
-
-                            --, onClick SubmitThreatForm
-                            ]
-                            [ text "test" ]
-                        ]
-                    ]
-                , div
-                    [ class "container " ]
-                    [ h2 [] [ text ("test popup") ]
-                    , button
-                        [ class "btn btn-info"
-                        , onClick DisplayPopup
-                        ]
-                        [ text "Display popup" ]
-                    , Dialog.view
-                        (if model.showDialog then
-                            Just (dialogConfig model)
-                         else
-                            Nothing
-                        )
-                    ]
-                ]
             ]
 
 
@@ -165,6 +135,27 @@ tableRow risk =
             , td [] [ text risk.admin.comment ]
             , td [] <| badge risk.admin.status
             ]
+
+
+
+-- set modal content
+
+
+dialogConfig : Risk -> Dialog.Config Msg
+dialogConfig risk =
+    { closeMessage = Just ClosePopup
+    , containerClass = Nothing
+    , header = Just (h3 [] [ text ("Uncertainty ID: " ++ (formatID risk.id)) ]) -- Remplacer par <| formatID risk.id
+    , body = Just (text ("Title: " ++ (toString risk.title)))
+    , footer =
+        Just
+            (button
+                [ class "btn btn-success"
+                , onClick ClosePopup
+                ]
+                [ text "OK" ]
+            )
+    }
 
 
 
@@ -245,24 +236,3 @@ zfill value =
             "0" ++ string
         else
             string
-
-
-
--- popup
-
-
-dialogConfig : Model -> Dialog.Config Msg
-dialogConfig model =
-    { closeMessage = Just Acknowledge
-    , containerClass = Nothing
-    , header = Just (h3 [] [ text "header test" ])
-    , body = Just (text "body test ")
-    , footer =
-        Just
-            (button
-                [ class "btn btn-success"
-                , onClick Acknowledge
-                ]
-                [ text "OK" ]
-            )
-    }

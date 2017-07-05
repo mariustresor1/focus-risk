@@ -2,11 +2,6 @@ module Types exposing (..)
 
 import Kinto
 import Set
-import Html exposing (..)
-
-
--- Model
--- State of the application
 
 
 type alias Model =
@@ -18,8 +13,6 @@ type alias Model =
     , risksPager : Maybe (Kinto.Pager Risk)
     , nextPage : Pages
     , selectedRisk : Maybe Risk
-    , showDialog : Bool -- popup
-    , counter : Int -- popup unuseful
     }
 
 
@@ -78,12 +71,7 @@ type Msg
     | SubmitThreatForm
     | ThreatFieldChange ThreatInput String
     | SelectRisk Risk
-    | Acknowledge -- popup
-    | DisplayPopup
-
-
-
---| AcknowledgeDialog
+    | ClosePopup
 
 
 type ThreatInput
@@ -121,17 +109,4 @@ type alias Risk =
 type alias RiskAdmin =
     { comment : String
     , status : String
-    }
-
-
-
--- pour le popup (changer config en popup)
-
-
-type alias Config msg =
-    { closeMessage : Maybe msg
-    , containerClass : Maybe String
-    , header : Maybe (Html msg)
-    , body : Maybe (Html msg)
-    , footer : Maybe (Html msg)
     }

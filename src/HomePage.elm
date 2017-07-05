@@ -6,6 +6,9 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 
 
+-- View
+
+
 homePage : Html Msg
 homePage =
     div
@@ -28,14 +31,20 @@ homePage =
                     [ li
                         []
                         [ a
-                            [ href "" ]
-                            [ text "Links to ISO 31000 and COSO Standards" ]
+                            [ href "https://www.iso.org/iso-31000-risk-management.html", target "_blank" ]
+                            [ text "Link to ISO 31000" ]
+                        ]
+                    , li
+                        []
+                        [ a
+                            [ href "https://www.coso.org/Pages/erm-integratedframework.aspx", target "_blank" ]
+                            [ text "Links to COSO Standards" ]
                         ]
                     , li
                         []
                         [ a
                             [ href "" ]
-                            [ text "Links to Company Rules" ]
+                            [ text "Links to the company rules" ]
                         ]
                     ]
                 ]

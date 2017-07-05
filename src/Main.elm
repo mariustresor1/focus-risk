@@ -25,7 +25,6 @@ init =
       , risksPager = Nothing
       , nextPage = HomePage
       , selectedRisk = Nothing
-      , showDialog = False
       }
     , Cmd.none
     )
@@ -154,11 +153,8 @@ update msg model =
         SelectRisk risk ->
             ( { model | selectedRisk = Just risk }, Cmd.none )
 
-        DisplayPopup ->
-            ( { model | showDialog = True }, Cmd.none )
-
-        Acknowledge ->
-            ( { model | showDialog = False }, Cmd.none )
+        ClosePopup ->
+            ( { model | selectedRisk = Nothing }, Cmd.none )
 
 
 updateError : error -> Model -> ( Model, Cmd Msg )
@@ -291,8 +287,6 @@ view model =
 
 
 
--- popup "dialog"
--- Renders a modal dialog whenever you supply a Config msg.
 -- Program
 
 

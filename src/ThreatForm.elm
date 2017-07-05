@@ -9,7 +9,6 @@ import Set
 
 updateThreatForm : ThreatInput -> ThreatFormData -> String -> ThreatFormData
 updateThreatForm fieldType threatForm value =
-    -- case fieldType of
     case fieldType of
         ThreatObjectives ->
             if Set.member value threatForm.threat_objectives_at_stake then
