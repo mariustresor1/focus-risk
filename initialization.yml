@@ -50,6 +50,7 @@ focus:
                   enum:
                     - Draft
                     - Pending
+                    - Assigned
                     - Closed
                     - Rejected
             type:

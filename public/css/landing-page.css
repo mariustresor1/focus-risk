@@ -712,6 +712,72 @@ p.labelperso {
     padding-bottom: 0px;
 } 
 
+/* Tableau des risks */
+
+.dashboardtable-colum-id{
+    min-width:80px;
+}
+
+.dashboardtable-colum-status{
+    min-width: 100px;
+}
+
+/* Display modal */
+
+.modal-dialog {
+    width: 800px;
+}
+
+.modal-content {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.modal-header {
+    padding-bottom: 0;
+}
+
+.modal-header h3 {
+    font-weight: 600;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.modal-body tr {
+    height: 25px;
+    vertical-align: top;
+} 
+
+.modal-body th {
+    width: 150px;
+} 
+
+.modal-body{
+    min-width: 150px;
+}
+
+.dashboard-modal-impact-schedule-line{
+    padding-right: 10px;
+}
+
+.modal-footer {
+    border-top-width: 0px;
+    padding-top: 15px;
+}
+
+.btn-success {
+    background-color: #4083FF;
+    padding: 4px 30px;
+}
+
+.modal-footer {     /* alignement du bouton OK à gauche */
+    text-align: left;
+}
+
+
+
+
+
 /* ======================================================================
         FIN DU CSS PERSO 
    ====================================================================== */ 

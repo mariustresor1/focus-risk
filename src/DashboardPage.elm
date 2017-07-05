@@ -20,68 +20,6 @@ dashboardPage risks selectedRisk =
 
                 Just risk ->
                     Dialog.view <| Just (dialogConfig risk)
-
-        {- div [ class "container-fluid container-dashboard-table", id "risk" ]
-           [ div [ class "row" ]
-               [ div [ class "col-sm-12" ]
-                   [ div [ class "white-box" ]
-                       [ table []
-                           [ tbody []
-                               [ tr []
-                                   [ th [] [ text "#" ]
-                                   , td [] [ text <| formatID risk.id ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Title: " ]
-                                   , td [] [ text risk.title ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Description: " ]
-                                   , td [] [ text risk.description ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Objectives: " ]
-                                   , td [] [ text <| String.join ", " risk.objectives_at_stake ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Project Package: " ]
-                                   , td [] [ text risk.project_package ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Type: " ]
-                                   , td [] [ text risk.threat_type ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Cause: " ]
-                                   , td [] [ text risk.cause ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Impact Schedule: " ]
-                                   , td [] [ text risk.impact_schedule ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Impact Cost: " ]
-                                   , td [] [ text risk.impact_cost ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Impact Performance: " ]
-                                   , td [] [ text risk.impact_performance ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Probability: " ]
-                                   , td [] [ text risk.probability ]
-                                   ]
-                               , tr []
-                                   [ th [] [ text "Mitigation: " ]
-                                   , td [] [ text risk.mitigation ]
-                                   ]
-                               ]
-                           ]
-                       ]
-                   ]
-               ]
-           ]
-        -}
     in
         div []
             [ div [ class "block" ]
@@ -100,11 +38,11 @@ dashboardPage risks selectedRisk =
                                 [ table [ class "table" ]
                                     [ thead []
                                         [ tr []
-                                            [ th [] [ text "#" ]
+                                            [ th [ class "dashboardtable-colum-id" ] [ text "#" ]
                                             , th [] [ text "Report date" ]
                                             , th [] [ text "Title" ]
                                             , th [] [ text "Comment" ]
-                                            , th [] [ text "Status" ]
+                                            , th [ class "dashboardtable-colum-status" ] [ text "Status" ]
                                             ]
                                         ]
                                     , tbody [] <| List.map tableRow risks
@@ -119,7 +57,7 @@ dashboardPage risks selectedRisk =
 
 
 
--- Creation of the table of risks and opportunities
+-- Table of risks and opportunities
 
 
 tableRow : Risk -> Html Msg
@@ -129,7 +67,7 @@ tableRow risk =
             DateTime.fromTimestamp <| toFloat risk.last_modified
     in
         tr []
-            [ td [] [ a [ href "#risk", onClick (SelectRisk risk) ] [ text <| formatID risk.id ] ]
+            [ td [ class "dashboard-modal-title" ] [ a [ href "#risk", onClick (SelectRisk risk) ] [ text <| formatID risk.id ] ]
             , td [] [ text <| showDate date ]
             , td [] [ text risk.title ]
             , td [] [ text risk.admin.comment ]
@@ -145,8 +83,56 @@ dialogConfig : Risk -> Dialog.Config Msg
 dialogConfig risk =
     { closeMessage = Just ClosePopup
     , containerClass = Nothing
-    , header = Just (h3 [] [ text ("Uncertainty ID: " ++ (formatID risk.id)) ]) -- Remplacer par <| formatID risk.id
-    , body = Just (text ("Title: " ++ (toString risk.title)))
+    , header = Just (h3 [] [ text ((formatID risk.id) ++ "  " ++ (risk.title)) ]) -- Remplacer par <| formatID risk.id
+
+    --  , body = Just (text ("Title: " ++ (toString risk.title)))
+    , body =
+        Just
+            (table []
+                [ tbody []
+                    [ tr [ class "dashboard-modal-line" ]
+                        [ th [] [ text "Description" ]
+                        , td [] [ text risk.description ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Objectives" ]
+                        , td [] [ text <| String.join ", " risk.objectives_at_stake ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Project Package" ]
+                        , td [] [ text risk.project_package ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Type" ]
+                        , td [] [ text risk.threat_type ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Cause" ]
+                        , td [] [ text risk.cause ]
+                        ]
+                    , tr []
+                        [ th [ class "dashboard-modal-impact-schedule-line" ] [ text "Impact on Schedule" ]
+                        , td [] [ text risk.impact_schedule ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Impact on Cost" ]
+                        , td [] [ text risk.impact_cost ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Impact on Perf." ]
+                        , td [] [ text risk.impact_performance ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Probability" ]
+                        , td [] [ text risk.probability ]
+                        ]
+                    , tr []
+                        [ th [] [ text "Mitigation" ]
+                        , td [] [ text risk.mitigation ]
+                        ]
+                    ]
+                ]
+            )
     , footer =
         Just
             (button
@@ -173,6 +159,18 @@ badge status =
 
         "Rejected" ->
             [ i [ class "fa fa-times-circle", style [ ( "color", "red" ) ] ] []
+            , text " "
+            , text status
+            ]
+
+        "Assigned" ->
+            [ i [ class "fa fa-user-circle", style [ ( "color", "blue" ) ] ] []
+            , text " "
+            , text status
+            ]
+
+        "Pending" ->
+            [ i [ class "fa fa-spinner", style [ ( "color", "grey" ) ] ] []
             , text " "
             , text status
             ]
@@ -220,10 +218,13 @@ showDate datetime =
             ++ (zfill month)
             ++ "/"
             ++ (toString year)
-            ++ " "
-            ++ (zfill hour)
-            ++ ":"
-            ++ (zfill minute)
+
+
+
+--++ " "
+--++ (zfill hour)
+--++ ":"
+--++ (zfill minute)
 
 
 zfill : Int -> String
