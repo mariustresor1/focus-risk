@@ -752,17 +752,38 @@ p.labelperso {
     width: 150px;
 } 
 
-.modal-body{
+.modal-body {
     min-width: 150px;
+}
+
+.form-control-dashboard-modal {
+    width: 450px;
 }
 
 .dashboard-modal-impact-schedule-line{
     padding-right: 10px;
 }
 
+.dashboard-modal-status-title {
+    padding-top: 20px;
+}
+
+.dashboard-modal-status-input {
+    padding-top: 20px;
+}
+
+.dashboard-modal-comment-title {
+    padding-top: 10px;    
+}
+
+.dashboard-modal-comment-input {
+    padding-top: 10px;    
+}
+
 .modal-footer {
     border-top-width: 0px;
     padding-top: 15px;
+    text-align: left; /* alignement du bouton OK à gauche */
 }
 
 .btn-success {
@@ -770,9 +791,6 @@ p.labelperso {
     padding: 4px 30px;
 }
 
-.modal-footer {     /* alignement du bouton OK à gauche */
-    text-align: left;
-}
 
 
 

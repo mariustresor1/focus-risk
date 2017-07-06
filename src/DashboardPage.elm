@@ -4,7 +4,7 @@ import Dialog
 import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick, onInput)
 import Time.TimeZones exposing (europe_paris)
 import Time.DateTime as DateTime exposing (DateTime)
 import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
@@ -39,7 +39,7 @@ dashboardPage risks selectedRisk =
                                     [ thead []
                                         [ tr []
                                             [ th [ class "dashboardtable-colum-id" ] [ text "#" ]
-                                            , th [] [ text "Report date" ]
+                                            , th [] [ text "Report" ]
                                             , th [] [ text "Title" ]
                                             , th [] [ text "Comment" ]
                                             , th [ class "dashboardtable-colum-status" ] [ text "Status" ]
@@ -83,9 +83,7 @@ dialogConfig : Risk -> Dialog.Config Msg
 dialogConfig risk =
     { closeMessage = Just ClosePopup
     , containerClass = Nothing
-    , header = Just (h3 [] [ text ((formatID risk.id) ++ "  " ++ (risk.title)) ]) -- Remplacer par <| formatID risk.id
-
-    --  , body = Just (text ("Title: " ++ (toString risk.title)))
+    , header = Just (h3 [] [ text ((formatID risk.id) ++ "  " ++ (risk.title)) ])
     , body =
         Just
             (table []
@@ -130,6 +128,33 @@ dialogConfig risk =
                         [ th [] [ text "Mitigation" ]
                         , td [] [ text risk.mitigation ]
                         ]
+                    , tr []
+                        [ th [ class "dashboard-modal-status-title" ] [ text "Status" ]
+                        , td [ class "form-group dashboard-modal-status-input" ]
+                            [ select
+                                [ class "form-control form-control-dashboard-modal", onInput <| UpdateStatus ]
+                                [ option
+                                    []
+                                    [ text risk.admin.status ]
+                                , option
+                                    []
+                                    [ text "Pending" ]
+                                , option
+                                    []
+                                    [ text "Assigned" ]
+                                , option
+                                    []
+                                    [ text "Closed" ]
+                                , option
+                                    []
+                                    [ text "Rejected" ]
+                                ]
+                            ]
+                        ]
+                    ]
+                , tr []
+                    [ th [ class "dashboard-modal-comment-title" ] [ text "Comment" ]
+                    , td [ class "dashboard-modal-comment-input" ] [ textarea [ class "form-control form-control-dashboard-modal", rows 5, onInput UpdateComment ] [ text risk.admin.comment ] ]
                     ]
                 ]
             )
