@@ -13,6 +13,7 @@ type alias Model =
     , risksPager : Maybe (Kinto.Pager Risk)
     , nextPage : Pages
     , selectedRisk : Maybe Risk
+    , riskChanged : Bool
     }
 
 
@@ -72,6 +73,9 @@ type Msg
     | ThreatFieldChange ThreatInput String
     | SelectRisk Risk
     | ClosePopup
+    | UpdateComment String
+    | UpdateStatus String
+    | RiskUpdatedResponse (Result Kinto.Error Risk)
 
 
 type ThreatInput

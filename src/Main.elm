@@ -25,6 +25,7 @@ init =
       , risksPager = Nothing
       , nextPage = HomePage
       , selectedRisk = Nothing
+      , riskChanged = False
       }
     , Cmd.none
     )
@@ -154,7 +155,79 @@ update msg model =
             ( { model | selectedRisk = Just risk }, Cmd.none )
 
         ClosePopup ->
-            ( { model | selectedRisk = Nothing }, Cmd.none )
+            ( { model | selectedRisk = Nothing }, saveRisk model.email model.password model.riskChanged model.selectedRisk )
+
+        UpdateComment value ->
+            case model.selectedRisk of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just risk ->
+                    let
+                        admin =
+                            risk.admin
+                    in
+                        ( { model
+                            | riskChanged = True
+                            , selectedRisk =
+                                Just
+                                    { risk
+                                        | admin =
+                                            { admin
+                                                | comment = value
+                                            }
+                                    }
+                          }
+                        , Cmd.none
+                        )
+
+        UpdateStatus value ->
+            case model.selectedRisk of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just risk ->
+                    let
+                        admin =
+                            risk.admin
+                    in
+                        ( { model
+                            | riskChanged = True
+                            , selectedRisk =
+                                Just
+                                    { risk
+                                        | admin =
+                                            { admin
+                                                | status = value
+                                            }
+                                    }
+                          }
+                        , Cmd.none
+                        )
+
+        RiskUpdatedResponse (Ok _) ->
+            case ( model.email, model.password ) of
+                ( Just email, Just password ) ->
+                    let
+                        client =
+                            getKintoClient email password
+                    in
+                        ( { model
+                            | risksPager = Just <| Kinto.emptyPager client recordResource
+                            , currentPage = DashboardPage
+                            , nextPage = DashboardPage
+                            , threatForm = emptyThreatForm
+                            , selectedRisk = Nothing
+                            , riskChanged = False
+                          }
+                        , fetchRisksList client
+                        )
+
+                _ ->
+                    ( { model | currentPage = LoginPage }, Cmd.none )
+
+        RiskUpdatedResponse (Err error) ->
+            model |> updateError error
 
 
 updateError : error -> Model -> ( Model, Cmd Msg )
@@ -175,6 +248,25 @@ fetchRisksList client =
         |> Kinto.getList recordResource
         |> Kinto.sortBy [ "-last_modified" ]
         |> Kinto.send FetchRecordsResponse
+
+
+saveRisk : Maybe String -> Maybe String -> Bool -> Maybe Risk -> Cmd Msg
+saveRisk email password riskChanged risk =
+    case ( riskChanged, email, password, risk ) of
+        ( True, Just email, Just password, Just risk ) ->
+            let
+                client =
+                    getKintoClient email password
+
+                data =
+                    encodeRisk risk
+            in
+                client
+                    |> Kinto.update recordResource risk.id data
+                    |> Kinto.send RiskUpdatedResponse
+
+        _ ->
+            Cmd.none
 
 
 recordResource : Kinto.Resource Risk
@@ -206,6 +298,21 @@ decodeRiskAdmin =
     JP.decode RiskAdmin
         |> JP.optional "comment" Decode.string ""
         |> JP.required "status" Decode.string
+
+
+encodeRiskAdmin : RiskAdmin -> Encode.Value
+encodeRiskAdmin admin =
+    Encode.object
+        [ ( "comment", Encode.string admin.comment )
+        , ( "status", Encode.string admin.status )
+        ]
+
+
+encodeRisk : Risk -> Encode.Value
+encodeRisk risk =
+    Encode.object
+        [ ( "admin", encodeRiskAdmin risk.admin )
+        ]
 
 
 encodeFormData : ThreatFormData -> Encode.Value
