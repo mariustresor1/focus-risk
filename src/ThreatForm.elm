@@ -107,7 +107,8 @@ threatForm threatFormError =
                 ]
             , div
                 [ class "block" ]
-                [ div
+                [ error
+                , div
                     [ class "container" ]
                     [ div
                         [ class "row" ]
@@ -121,8 +122,7 @@ threatForm threatFormError =
                         ]
                     , div
                         [ class "row" ]
-                        [ error
-                        , p
+                        [ p
                             []
                             [ text "Each threat must be identified against the specific objectives of the organization as well as properly described, qualified and quantified." ]
                         , p
