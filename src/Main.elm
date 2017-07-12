@@ -291,6 +291,7 @@ decodeRecord =
         |> JP.required "impact_performance" Decode.string
         |> JP.required "probability" Decode.string
         |> JP.required "mitigation" Decode.string
+        |> JP.optional "author_email" Decode.string "<unknown>"
 
 
 decodeRiskAdmin : Decode.Decoder RiskAdmin
@@ -315,8 +316,8 @@ encodeRisk risk =
         ]
 
 
-encodeFormData : ThreatFormData -> Encode.Value
-encodeFormData formData =
+encodeFormData : String -> ThreatFormData -> Encode.Value
+encodeFormData email formData =
     Encode.object
         [ ( "objectives_at_stake", Encode.list <| List.map Encode.string <| Set.toList formData.threat_objectives_at_stake )
         , ( "project_package", Encode.string formData.threat_project_package )
@@ -329,6 +330,7 @@ encodeFormData formData =
         , ( "impact_performance", Encode.string formData.threat_impact_performance )
         , ( "probability", Encode.string formData.threat_probability )
         , ( "mitigation", Encode.string formData.threat_mitigation )
+        , ( "author_email", Encode.string email )
         ]
 
 
@@ -336,7 +338,7 @@ submitThreatForm : String -> String -> ThreatFormData -> Cmd Msg
 submitThreatForm email password formData =
     let
         data =
-            encodeFormData formData
+            encodeFormData email formData
     in
         getKintoClient email password
             |> Kinto.create recordResource data

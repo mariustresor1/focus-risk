@@ -78,6 +78,10 @@ type Msg
     | RiskUpdatedResponse (Result Kinto.Error Risk)
 
 
+
+--| DeleteRecord RecordId
+
+
 type ThreatInput
     = ThreatObjectives
     | ThreatProjectPackage
@@ -107,6 +111,7 @@ type alias Risk =
     , impact_performance : String
     , probability : String
     , mitigation : String
+    , author_email : String
     }
 
 

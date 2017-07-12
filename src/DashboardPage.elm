@@ -129,6 +129,10 @@ dialogConfig risk =
                         , td [] [ text risk.mitigation ]
                         ]
                     , tr []
+                        [ th [] [ text "Author email" ]
+                        , td [] [ text risk.author_email ]
+                        ]
+                    , tr []
                         [ th [ class "dashboard-modal-status-title" ] [ text "Status" ]
                         , td [ class "form-group dashboard-modal-status-input" ]
                             [ select
@@ -170,7 +174,7 @@ dialogConfig risk =
 
 
 
--- Font Awesome badges for status display
+-- Font Awesome badges for status display in the table
 
 
 badge : String -> List (Html Msg)
