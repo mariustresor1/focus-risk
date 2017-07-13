@@ -68,24 +68,26 @@ update msg model =
 
         FetchRecordsResponse (Ok newPager) ->
             let
-                cmd =
+                pager =
                     case model.risksPager of
                         Just pager ->
-                            buildXls <| Encode.list <| List.map encodeRiskData pager.objects
+                            Kinto.updatePager newPager pager
 
                         Nothing ->
+                            newPager
+
+                cmd =
+                    case pager.objects of
+                        [] ->
                             Cmd.none
+
+                        objects ->
+                            buildXls <| Encode.list <| List.map encodeRiskData objects
             in
                 ( { model
                     | error = Nothing
                     , currentPage = model.nextPage
-                    , risksPager =
-                        case model.risksPager of
-                            Just pager ->
-                                Just <| Kinto.updatePager newPager pager
-
-                            Nothing ->
-                                Just <| newPager
+                    , risksPager = Just pager
                   }
                 , cmd
                 )
