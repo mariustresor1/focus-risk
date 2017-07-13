@@ -107,12 +107,12 @@ threatForm threatFormError =
                 ]
             , div
                 [ class "block" ]
-                [ error
-                , div
+                [ div
                     [ class "container" ]
                     [ div
                         [ class "row" ]
-                        [ h2
+                        [ error
+                        , h2
                             []
                             [ text "Describe the threat "
                             , span
@@ -651,7 +651,8 @@ opportunityForm threatFormError =
                     [ class "container" ]
                     [ div
                         [ class "row" ]
-                        [ h2
+                        [ error
+                        , h2
                             []
                             [ text "Describe the opportunity"
                             , span
@@ -661,8 +662,7 @@ opportunityForm threatFormError =
                         ]
                     , div
                         [ class "row" ]
-                        [ error
-                        , p
+                        [ p
                             []
                             [ text "Each threat must be identified against the specific objectives of the organization as well as properly described, qualified and quantified." ]
                         , p

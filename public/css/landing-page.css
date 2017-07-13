@@ -780,6 +780,10 @@ p.labelperso {
     padding-top: 10px;    
 }
 
+.dashboard-modal-author-col {
+    width: 120px;
+}
+
 .modal-footer {
     border-top-width: 0px;
     padding-top: 15px;

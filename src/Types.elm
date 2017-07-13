@@ -14,6 +14,7 @@ type alias Model =
     , nextPage : Pages
     , selectedRisk : Maybe Risk
     , riskChanged : Bool
+    , xls : Maybe Base64 -- for elm-json2xls
     }
 
 
@@ -76,10 +77,7 @@ type Msg
     | UpdateComment String
     | UpdateStatus String
     | RiskUpdatedResponse (Result Kinto.Error Risk)
-
-
-
---| DeleteRecord RecordId
+    | XlsBuilt Base64
 
 
 type ThreatInput
@@ -118,4 +116,18 @@ type alias Risk =
 type alias RiskAdmin =
     { comment : String
     , status : String
+    }
+
+
+
+-- for elm-json2xls
+
+
+type alias Base64 =
+    String
+
+
+type alias Record =
+    { title : String
+    , content : String
     }

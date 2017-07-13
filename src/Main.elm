@@ -1,4 +1,4 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Types exposing (..)
 import Html exposing (..)
@@ -26,6 +26,7 @@ init =
       , nextPage = HomePage
       , selectedRisk = Nothing
       , riskChanged = False
+      , xls = Nothing
       }
     , Cmd.none
     )
@@ -66,19 +67,28 @@ update msg model =
                                 )
 
         FetchRecordsResponse (Ok newPager) ->
-            ( { model
-                | error = Nothing
-                , currentPage = model.nextPage
-                , risksPager =
+            let
+                cmd =
                     case model.risksPager of
                         Just pager ->
-                            Just <| Kinto.updatePager newPager pager
+                            buildXls <| Encode.list <| List.map encodeRiskData pager.objects
 
                         Nothing ->
-                            Just <| newPager
-              }
-            , Cmd.none
-            )
+                            Cmd.none
+            in
+                ( { model
+                    | error = Nothing
+                    , currentPage = model.nextPage
+                    , risksPager =
+                        case model.risksPager of
+                            Just pager ->
+                                Just <| Kinto.updatePager newPager pager
+
+                            Nothing ->
+                                Just <| newPager
+                  }
+                , cmd
+                )
 
         FetchRecordsResponse (Err (Kinto.KintoError 401 _ error)) ->
             ( { model | error = Just "Bad email and password. Try again.", password = Nothing }, Cmd.none )
@@ -229,6 +239,9 @@ update msg model =
         RiskUpdatedResponse (Err error) ->
             model |> updateError error
 
+        XlsBuilt xls ->
+            ( { model | xls = Just xls }, Cmd.none )
+
 
 updateError : error -> Model -> ( Model, Cmd Msg )
 updateError error model =
@@ -316,6 +329,26 @@ encodeRisk risk =
         ]
 
 
+encodeRiskData : Risk -> Encode.Value
+encodeRiskData risk =
+    Encode.object
+        [ ( "objectives_at_stake", Encode.list <| List.map Encode.string risk.objectives_at_stake )
+        , ( "project_package", Encode.string risk.project_package )
+        , ( "type", Encode.string risk.threat_type )
+        , ( "description", Encode.string risk.description )
+        , ( "title", Encode.string risk.title )
+        , ( "cause", Encode.string risk.cause )
+        , ( "impact_schedule", Encode.string risk.impact_schedule )
+        , ( "impact_cost", Encode.string risk.impact_cost )
+        , ( "impact_performance", Encode.string risk.impact_performance )
+        , ( "probability", Encode.string risk.probability )
+        , ( "mitigation", Encode.string risk.mitigation )
+        , ( "author_email", Encode.string risk.author_email )
+        , ( "status", Encode.string risk.admin.status )
+        , ( "admin_comment", Encode.string risk.admin.comment )
+        ]
+
+
 encodeFormData : String -> ThreatFormData -> Encode.Value
 encodeFormData email formData =
     Encode.object
@@ -343,6 +376,31 @@ submitThreatForm email password formData =
         getKintoClient email password
             |> Kinto.create recordResource data
             |> Kinto.send CreateRecordResponse
+
+
+
+-- for elm-json2xls
+
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.batch
+        [ xlsBuilt XlsBuilt
+        ]
+
+
+encodeRecord : Record -> Encode.Value
+encodeRecord record =
+    Encode.object
+        [ ( "title", Encode.string record.title )
+        , ( "content", Encode.string record.content )
+        ]
+
+
+port buildXls : Encode.Value -> Cmd msg
+
+
+port xlsBuilt : (String -> msg) -> Sub msg
 
 
 
@@ -391,7 +449,7 @@ view model =
             in
                 div []
                     [ navigation model.currentPage
-                    , page
+                    , page model.xls
                     ]
 
 
@@ -405,5 +463,7 @@ main =
         { init = init
         , update = update
         , view = view
-        , subscriptions = always Sub.none
+        , subscriptions = subscriptions -- pour elm-json2xls
+
+        --, subscriptions = always Sub.none
         }

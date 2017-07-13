@@ -10,8 +10,11 @@ import Time.DateTime as DateTime exposing (DateTime)
 import Time.ZonedDateTime as ZonedDateTime exposing (ZonedDateTime)
 
 
-dashboardPage : List Risk -> Maybe Risk -> Html Msg
-dashboardPage risks selectedRisk =
+-- view
+
+
+dashboardPage : List Risk -> Maybe Risk -> Maybe Base64 -> Html Msg
+dashboardPage risks selectedRisk xls =
     let
         displayRisk =
             case selectedRisk of
@@ -20,6 +23,18 @@ dashboardPage risks selectedRisk =
 
                 Just risk ->
                     Dialog.view <| Just (dialogConfig risk)
+
+        file =
+            case xls of
+                Nothing ->
+                    div [] []
+
+                Just xls ->
+                    a
+                        [ attribute "download" "file.xls"
+                        , "data:application/vnd.ms-excel;base64," ++ xls |> href
+                        ]
+                        [ text "Download XLS file" ]
     in
         div []
             [ div [ class "block" ]
@@ -27,7 +42,9 @@ dashboardPage risks selectedRisk =
                     [ class "container" ]
                     [ h1
                         []
-                        [ text "Your personal dashboard" ]
+                        [ text "Your personal dashboard"
+                        ]
+                    , file
                     ]
                 ]
             , div [ class "container-fluid container-dashboard-table" ]
@@ -129,7 +146,7 @@ dialogConfig risk =
                         , td [] [ text risk.mitigation ]
                         ]
                     , tr []
-                        [ th [] [ text "Author email" ]
+                        [ th [] [ text "Author" ]
                         , td [] [ text risk.author_email ]
                         ]
                     , tr []
